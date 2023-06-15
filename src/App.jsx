@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [surahs, setSurahs] = useState([]);
+    const [currentSurah, setCurrentSurah] = useState(1);
+    useEffect(() => {
+        const fetchSurahs = async () => {
+            try {
+                const res = await fetch(
+                    "http://api.alquran.cloud/v1/quran/quran-uthmani"
+                );
+                const data = await res.json();
+                const surahData = data.data.surahs;
+                setSurahs(surahData);
+                // console.log(surahData);
+                const result = surahs.find((item) => item.number === currentSurah);
+                console.log(result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+        fetchSurahs();
+
+    }, []);
+
+    return (
+        <>
+            {surahs.length > 0 ? (
+                <div>
+                    <button
+                        onClick={() => {
+                            setCurrentSurah(currentSurah + 1);
+                        }}
+                    >
+                        Next surah
+                    </button>
+                </div>
+            ) : (
+                <p>Loading surahs...</p>
+            )}
+        </>
+    );
 }
 
-export default App
+export default App;
