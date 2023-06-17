@@ -1,0 +1,35 @@
+nav {
+    min-height: 10vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: transparent;
+        cursor: pointer;
+        border: 2px solid rgb(65, 65, 65);
+        padding: 1rem;
+        transition: all 0.3s ease;
+        &:hover {
+            background-color: rgb(65, 65, 65);
+            color: #f2f2f2;
+        }
+        svg {
+            path {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    nav {
+        button {
+            z-index: 10;
+        }
+    }
+}

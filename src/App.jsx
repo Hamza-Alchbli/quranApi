@@ -1,16 +1,30 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+// import {
+//     faPlay,
+//     faAngleLeft,
+//     faAngleRight,
+//     faPause,
+// } from "@fortawesome/free-solid-svg-icons";
+
+import Nav from "./components/Nav";
+import Library from "./components/library";
+import Surah from "./components/Surah";
+import PLayer from "./components/Player";
 
 function App() {
     const [surahs, setSurahs] = useState([]);
-    const [currentSurah, setCurrentSurah] = useState("");
-    const audioRef = useRef(null);
+    const [currentSurah, setCurrentSurah] = useState("Al-Faatiha");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [totalSeconds, setTotalSeconds] = useState(0);
-    const [currentSurahAyahs, setCurrentSurahAyahs] = useState([]);
+    const [reciter, setReciter] = useState("Alafasy");
+    const [isPlaying, setIsPlaying] = useState(false);
     const audioContext = new AudioContext();
     let sourceNode = null; // Keep track of the current audio source
+
+    const [libraryStatus, setLibraryStatus] = useState(false);
+
     useEffect(() => {
         const fetchSurahs = async () => {
             try {
@@ -29,6 +43,7 @@ function App() {
         };
 
         fetchSurahs();
+        generateSurahAudioURL(0);
     }, []);
 
     const generateSurahAudioURL = async (index) => {
@@ -37,8 +52,9 @@ function App() {
                 `https://api.alquran.cloud/v1/surah/${index + 1}/ar.alafasy`
             );
             const { data } = await response.json();
-            const surahData = data.ayahs;
-            const audioUrls = surahData.map((ayah) => ayah.audio);
+            const surahData = data;
+
+            const audioUrls = surahData.ayahs.map((ayah) => ayah.audio);
 
             const audioBufferPromises = audioUrls.map((url) => {
                 return fetch(url)
@@ -52,30 +68,48 @@ function App() {
 
             const mergedBuffer = mergeAudioBuffers(audioBuffers);
 
-
             if (sourceNode !== null) {
-                sourceNode.stop();
+                // sourceNode.stop();
                 sourceNode.disconnect();
             }
             sourceNode = audioContext.createBufferSource();
             sourceNode.buffer = mergedBuffer;
 
             sourceNode.connect(audioContext.destination);
-            sourceNode.start();
+            // sourceNode.start();
 
             setLoading(false);
 
-            const startTime = performance.now();
-            const totalDuration = audioBuffers.reduce(
+            let totalDuration = audioBuffers.reduce(
                 (sum, buffer) => sum + buffer.duration,
                 0
             );
 
-            const endTime = performance.now();
-            const calculationTime = endTime - startTime;
+            // const startTime = performance.now();
+            // const endTime = performance.now();
+            // const calculationTime = endTime - startTime;
+
+            const hours = Math.floor(totalDuration / 3600);
+            const minutes = Math.floor((totalDuration % 3600) / 60);
+            const seconds = Math.floor(totalDuration % 60);
+
+            const formattedDuration = `${hours
+                .toString()
+                .padStart(1, "0")}:${minutes
+                .toString()
+                .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                
+            setTotalSeconds(formattedDuration);
+            setCurrentSurah(data.englishName);
+            setReciter(data.edition.englishName);
+
+            // Start updating elapsed time continuously
+            requestAnimationFrame(updateElapsedTime);
 
             // console.log("Total time (in seconds):", totalDuration);
             // console.log("Calculation time (in milliseconds):", calculationTime);
+
+            console.log(data);
         } catch (err) {
             console.log(err);
             setError("Failed to fetch surah audio. Please try again later.");
@@ -109,78 +143,42 @@ function App() {
         return mergedBuffer;
     };
 
-    const playSurahAudio = () => {
-        if (audioRef.current) {
-            if (audioRef.current.duration === Infinity) {
-                audioRef.current.addEventListener("loadedmetadata", () => {
-                    audioRef.current.play();
-                    setTotalSeconds(Math.floor(audioRef.current.duration));
-                });
-            } else {
-                audioRef.current.play();
-                setTotalSeconds(Math.floor(audioRef.current.duration));
-            }
+    const updateElapsedTime = () => {
+        if (sourceNode && sourceNode.context.state === "running") {
+            setElapsedSeconds(Math.floor(sourceNode.context.currentTime));
         }
+        requestAnimationFrame(updateElapsedTime);
     };
-
-    const handleTimeUpdate = () => {
-        if (audioRef.current) {
-            const currentTime = Math.floor(audioRef.current.currentTime);
-            setElapsedSeconds(currentTime);
-        }
-    };
-
     return (
-        <>
+        <div>
             {loading ? (
                 <p>Loading surahs...</p>
             ) : error ? (
                 <p>{error}</p>
             ) : (
-                <div>
-                    {surahs.map((surah, index) => {
-                        return (
-                            <div key={surah.name}>
-                                <p>{surah.name}</p>
-                                <p>{surah.englishName}</p>
-                                <p>{surah.englishNameTranslation}</p>
-                                <button
-                                    onClick={() => {
-                                        generateSurahAudioURL(index);
-                                        // setCurrentSurah(surah.name);
-                                    }}
-                                >
-                                    Play Surah
-                                </button>
-                                <p></p>
-                            </div>
-                        );
-                    })}
-                    <p>Elapsed Time: {elapsedSeconds} seconds</p>
-                    <p>Total Duration: {totalSeconds} seconds</p>
+                <div className={`App ${libraryStatus ? "library-active" : ""}`}>
+                    {/* <p>Elapsed Time: {elapsedSeconds} seconds</p>
+                    <p>Total Duration: {totalSeconds}</p> */}
+                    {/* <p>{currentSurah}</p>
+                    <p>{reciter}</p> */}
+                    <Nav
+                        libraryStatus={libraryStatus}
+                        setLibraryStatus={setLibraryStatus}
+                    />
+                    <Surah currentSurah={currentSurah} reciter={reciter} />
+                    <PLayer
+                        isPlaying={isPlaying}
+                        setIsPlaying={setIsPlaying}
+                        generateSurahAudioURL={generateSurahAudioURL}
+                    />
+                    <Library
+                        surahs={surahs}
+                        libraryStatus={libraryStatus}
+                        generateSurahAudioURL={generateSurahAudioURL}
+                    ></Library>
                 </div>
             )}
-
-            {currentSurahAyahs.length > 0 && (
-                <>
-                    {currentSurahAyahs.map((ayah) => (
-                        <div key={ayah.number}>
-                            <p>{ayah.text}</p>
-                            <audio src={ayah.audio} controls />
-                        </div>
-                    ))}
-                </>
-            )}
-
-            {currentSurah && (
-                <audio
-                    ref={audioRef}
-                    src={currentSurahAyahs[0].audio}
-                    onCanPlayThrough={playSurahAudio}
-                    onTimeUpdate={handleTimeUpdate}
-                />
-            )}
-        </>
+        </div>
     );
 }
 
