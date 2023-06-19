@@ -1,10 +1,4 @@
 import { useState, useEffect } from "react";
-// import {
-//     faPlay,
-//     faAngleLeft,
-//     faAngleRight,
-//     faPause,
-// } from "@fortawesome/free-solid-svg-icons";
 
 import Nav from "./components/Nav";
 import Library from "./components/library";
@@ -13,14 +7,14 @@ import PLayer from "./components/Player";
 
 function App() {
     const [surahs, setSurahs] = useState([]);
-    const [currentSurah, setCurrentSurah] = useState("Al-Faatiha");
+    const [currentSurah, setCurrentSurah] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [totalSeconds, setTotalSeconds] = useState(0);
-    const [reciter, setReciter] = useState("Alafasy");
     const [isPlaying, setIsPlaying] = useState(false);
     const audioContext = new AudioContext();
+    const [playingSurah, setPlayingSurah] = useState();
     let sourceNode = null; // Keep track of the current audio source
 
     const [libraryStatus, setLibraryStatus] = useState(false);
@@ -43,10 +37,11 @@ function App() {
         };
 
         fetchSurahs();
-        generateSurahAudioURL(0);
+        generateSurahAudioURL(112);
     }, []);
 
     const generateSurahAudioURL = async (index) => {
+        console.log("insdie generate surah audio");
         try {
             const response = await fetch(
                 `https://api.alquran.cloud/v1/surah/${index + 1}/ar.alafasy`
@@ -76,8 +71,6 @@ function App() {
             sourceNode.buffer = mergedBuffer;
 
             sourceNode.connect(audioContext.destination);
-            // sourceNode.start();
-
             setLoading(false);
 
             let totalDuration = audioBuffers.reduce(
@@ -93,23 +86,32 @@ function App() {
             const minutes = Math.floor((totalDuration % 3600) / 60);
             const seconds = Math.floor(totalDuration % 60);
 
-            const formattedDuration = `${hours
-                .toString()
-                .padStart(1, "0")}:${minutes
-                .toString()
-                .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-                
+            let formattedDuration = "";
+
+            if (hours > 0) {
+                formattedDuration += `${hours.toString().padStart(2, "0")}:`;
+            }
+
+            if (minutes > 0 || hours > 0 || seconds > 0) {
+                formattedDuration += `${minutes.toString().padStart(2, "0")}:`;
+            }
+
+            formattedDuration += `${seconds.toString().padStart(2, "0")}`;
+
             setTotalSeconds(formattedDuration);
-            setCurrentSurah(data.englishName);
-            setReciter(data.edition.englishName);
-
+            setCurrentSurah(data);
+            
             // Start updating elapsed time continuously
-            requestAnimationFrame(updateElapsedTime);
-
+            // sourceNode.start();
+            if (!isPlaying) {
+                requestAnimationFrame(updateElapsedTime);
+            }
             // console.log("Total time (in seconds):", totalDuration);
             // console.log("Calculation time (in milliseconds):", calculationTime);
 
-            console.log(data);
+            // console.log(data);
+            // console.log(sourceNode);
+            setPlayingSurah(mergedBuffer);
         } catch (err) {
             console.log(err);
             setError("Failed to fetch surah audio. Please try again later.");
@@ -145,10 +147,28 @@ function App() {
 
     const updateElapsedTime = () => {
         if (sourceNode && sourceNode.context.state === "running") {
-            setElapsedSeconds(Math.floor(sourceNode.context.currentTime));
+            const currentTime = Math.floor(sourceNode.context.currentTime);
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = currentTime % 60;
+            let formattedTime = `${minutes
+                .toString()
+                .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+            if (minutes >= 60) {
+                const hours = Math.floor(minutes / 60);
+                const remainingMinutes = minutes % 60;
+                formattedTime = `${hours
+                    .toString()
+                    .padStart(2, "0")}:${remainingMinutes
+                    .toString()
+                    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+            }
+
+            setElapsedSeconds(formattedTime);
         }
         requestAnimationFrame(updateElapsedTime);
     };
+
     return (
         <div>
             {loading ? (
@@ -157,19 +177,20 @@ function App() {
                 <p>{error}</p>
             ) : (
                 <div className={`App ${libraryStatus ? "library-active" : ""}`}>
-                    {/* <p>Elapsed Time: {elapsedSeconds} seconds</p>
-                    <p>Total Duration: {totalSeconds}</p> */}
-                    {/* <p>{currentSurah}</p>
-                    <p>{reciter}</p> */}
                     <Nav
                         libraryStatus={libraryStatus}
                         setLibraryStatus={setLibraryStatus}
                     />
-                    <Surah currentSurah={currentSurah} reciter={reciter} />
+                    <Surah currentSurah={currentSurah} />
                     <PLayer
                         isPlaying={isPlaying}
                         setIsPlaying={setIsPlaying}
                         generateSurahAudioURL={generateSurahAudioURL}
+                        playingSurah={playingSurah}
+                        totalSeconds={totalSeconds}
+                        elapsedSeconds={elapsedSeconds}
+                        audioContext={audioContext}
+                        currentSurah={currentSurah}
                     />
                     <Library
                         surahs={surahs}
