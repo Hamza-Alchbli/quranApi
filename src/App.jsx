@@ -14,15 +14,11 @@ function App() {
     const [isPlaying, setIsPlaying] = useState(false);
     // data states (surahs contains the text data and SurahsAudio contains audio data)
     const [surahs, setSurahs] = useState([]);
-    const [surahsAudio, setSurahsAudio] = useState([]);
-
+    // curent surah data and audio
+    const audio = useRef(null);
     const [currentSurah, setCurrentSurah] = useState();
     const [currentSurahAudio, setCurrentSurahAudio] = useState(1);
-    const [currentTime, setCurrentTime] = useState();
-
-    const [totalSeconds, setTotalSeconds] = useState(0);
-    const audio = useRef(null);
-    const [surahInfo,setSurahInfo] = useState({
+    const [surahInfo, setSurahInfo] = useState({
         currentTime: 0,
         duration: 0,
         animationPercentage: 0,
@@ -37,9 +33,9 @@ function App() {
                 const { data } = await response.json();
                 const surahData = data.surahs;
                 setSurahs(surahData);
-                setCurrentSurah(surahData[1]);
+                setCurrentSurah(surahData[0]);
                 setCurrentSurahAudio(
-                    "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/2.mp3"
+                    "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/1.mp3"
                 );
                 setLoading(false);
             } catch (error) {
@@ -48,25 +44,10 @@ function App() {
                 setLoading(false);
             }
         };
-        const fetchSurahsAudio = async () => {
-            try {
-                let data = [];
-                for (let i = 1; i < 114; i++) {
-                    data.push(
-                        `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${i}.mp3`
-                    );
-                }
-                setSurahsAudio(data);
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-                setError("Failed to fetch surahs. Please try again later.");
-                setLoading(false);
-            }
-        };
+
         fetchSurahs();
-        fetchSurahsAudio();
     }, []);
+
     useEffect(() => {
         if (currentSurahAudio) {
             const playAudio = async () => {
@@ -99,16 +80,22 @@ function App() {
         }
     };
 
-    const timeUpdateHandler = (e) =>{
-        const current = e.target.currentTime
-        const duration = e.target.duration
+    const timeUpdateHandler = (e) => {
+        const current = e.target.currentTime;
+        const duration = e.target.duration;
         //Calculate percentage
         const roundedCurrent = Math.round(current);
         const roundedDuration = Math.round(duration);
-        const animation = Math.round((roundedCurrent / roundedDuration )* 100)
-    
-        setSurahInfo({...surahInfo, currentTime: current,duration, animationPercentage:animation})
-      }
+        const animation = Math.round((roundedCurrent / roundedDuration) * 100);
+
+        setSurahInfo({
+            ...surahInfo,
+            currentTime: current,
+            duration,
+            animationPercentage: animation,
+        });
+    };
+
     const surahEndHandler = () => {
         let currentIndex = currentSurah.number - 1;
 
@@ -122,7 +109,7 @@ function App() {
     return (
         <div>
             {loading ? (
-                <p>Loading surahs...</p>
+                <p>Loading website...</p>
             ) : error ? (
                 <p>{error}</p>
             ) : (
@@ -136,7 +123,6 @@ function App() {
                         isPlaying={isPlaying}
                         setIsPlaying={setIsPlaying}
                         generateSurahAudioURL={generateSurahAudioURL}
-                        totalSeconds={totalSeconds}
                         currentSurah={currentSurah}
                         audio={audio}
                         surahInfo={surahInfo}

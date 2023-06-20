@@ -1,9 +1,11 @@
+import PropTypes from "prop-types";
+
 import { faQuran } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Nav({ libraryStatus, setLibraryStatus }) {
     return (
         <nav>
-            <h1>Quranic Waves</h1>
+            <h1>Quranic<img src="/icons/waves.svg" alt="waves" />Waves</h1>
             <button onClick={() => setLibraryStatus(!libraryStatus)}>
                 Library
                 <FontAwesomeIcon icon={faQuran} size="lg" />
@@ -11,5 +13,10 @@ function Nav({ libraryStatus, setLibraryStatus }) {
         </nav>
     );
 }
+
+Nav.propTypes = {
+    libraryStatus: PropTypes.bool.isRequired,
+    setLibraryStatus: PropTypes.func.isRequired,
+};
 
 export default Nav;

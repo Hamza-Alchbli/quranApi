@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 import LibrarySurah from "./LibrarySurah.jsx";
 
 function Library({ surahs, libraryStatus, generateSurahAudioURL }) {
@@ -18,4 +20,9 @@ function Library({ surahs, libraryStatus, generateSurahAudioURL }) {
     );
 }
 
+Library.propTypes = {
+    surahs : PropTypes.array.isRequired,
+    libraryStatus: PropTypes.bool.isRequired,
+    generateSurahAudioURL: PropTypes.func.isRequired
+}
 export default Library;

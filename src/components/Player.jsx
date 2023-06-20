@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faAngleLeft,
@@ -5,8 +7,6 @@ import {
     faPause,
     faPlay,
 } from "@fortawesome/free-solid-svg-icons";
-
-import { useState } from "react";
 
 function PLayer({
     isPlaying,
@@ -54,7 +54,7 @@ function PLayer({
     };
     const dragHandler = (e) => {
         audio.current.currentTime = e.target.value;
-        setSurahInfo({ ...surahInfo, currentTime: e.target.value });
+        setSurahInfo({ ...surahInfo, currentTime: parseInt(e.target.value) });
     };
     const trackAnim = {
         transform: `translateX(${surahInfo.animationPercentage}%)`,
@@ -67,7 +67,7 @@ function PLayer({
                         <p>{getTime(surahInfo.currentTime)}</p>
                         <div
                             style={{
-                                background: `linear-gradient(to right,#2ecc71,#053318)`,
+                                background: `linear-gradient(to right,#87CEEB,#DAA520)`,
                             }}
                             className="track"
                         >
@@ -112,5 +112,25 @@ function PLayer({
         </div>
     );
 }
+
+PLayer.propTypes = {
+    isPlaying: PropTypes.bool.isRequired,
+    setIsPlaying: PropTypes.func.isRequired,
+    generateSurahAudioURL: PropTypes.func.isRequired,
+    currentSurah: PropTypes.shape({
+        number: PropTypes.number.isRequired,
+        // Add other prop types for the `currentSurah` object if needed
+    }),
+    audio: PropTypes.shape({
+        current: PropTypes.instanceOf(Element),
+    }),
+    surahInfo: PropTypes.shape({
+        currentTime: PropTypes.number.isRequired,
+        duration: PropTypes.number.isRequired,
+        animationPercentage: PropTypes.number.isRequired,
+    }).isRequired,
+    setSurahInfo: PropTypes.func.isRequired,
+};
+
 
 export default PLayer;
