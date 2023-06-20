@@ -28,7 +28,7 @@
         width: 80px;
     }
     &:hover {
-        background-color: rgb(222, 222, 255);
+        background-color: #87CEEB;
         transition: background 0.5s ease;
     }
 }
@@ -43,7 +43,7 @@
 }
 
 .selected {
-    background-color: rgb(203, 224, 255);
+    background-color: #87CEEB;
     color: #f2f2f2;
 }
 .active-library {
