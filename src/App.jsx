@@ -10,7 +10,7 @@ function App() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     // library and isPlaying states
-    const [libraryStatus, setLibraryStatus] = useState(true);
+    const [libraryStatus, setLibraryStatus] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     // data states (surahs contains the text data and SurahsAudio contains audio data)
     const [surahs, setSurahs] = useState([]);
