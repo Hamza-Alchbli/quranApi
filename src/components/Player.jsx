@@ -14,6 +14,8 @@ function PLayer({
     generateSurahAudioURL,
     currentSurah,
     audio,
+    surahInfo,
+    setSurahInfo,
 }) {
     const playSongHandler = () => {
         if (isPlaying) {
@@ -50,12 +52,19 @@ function PLayer({
             ("0" + Math.floor(time % 60)).slice(-2)
         );
     };
+    const dragHandler = (e) => {
+        audio.current.currentTime = e.target.value;
+        setSurahInfo({ ...surahInfo, currentTime: e.target.value });
+    };
+    const trackAnim = {
+        transform: `translateX(${surahInfo.animationPercentage}%)`,
+    };
     return (
         <div className="player">
             {audio.current ? (
                 <>
                     <div className="time-control">
-                        <p>{getTime(audio.current.currentTime)}</p>
+                        <p>{getTime(surahInfo.currentTime)}</p>
                         <div
                             style={{
                                 background: `linear-gradient(to right,#2ecc71,#053318)`,
@@ -64,17 +73,17 @@ function PLayer({
                         >
                             <input
                                 min={0}
-                                max={audio.current.duration || 0}
-                                value={0}
-                                //  onChange={dragHandler}
-                                onChange={() => {
-                                    console.log("ss");
-                                }}
+                                max={surahInfo.duration || 0}
+                                value={surahInfo.duration || 0}
+                                onChange={dragHandler}
                                 type="range"
                             />
-                            {/* <div  style={trackAnim} className="animate-track"></div> */}
+                            <div
+                                style={trackAnim}
+                                className="animate-track"
+                            ></div>
                         </div>
-                        <p>{getTime(audio.current.duration)}</p>
+                        <p>{getTime(surahInfo.duration)}</p>
                     </div>
                     <div className="play-control">
                         <FontAwesomeIcon

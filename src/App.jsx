@@ -22,8 +22,11 @@ function App() {
 
     const [totalSeconds, setTotalSeconds] = useState(0);
     const audio = useRef(null);
-
-    const [firstLoaded, setFirstLoaded] = useState(true);
+    const [surahInfo,setSurahInfo] = useState({
+        currentTime: 0,
+        duration: 0,
+        animationPercentage: 0,
+    });
 
     useEffect(() => {
         const fetchSurahs = async () => {
@@ -102,7 +105,16 @@ function App() {
             setCurrentTime(currentTime);
         }
     };
-
+    const timeUpdateHandler = (e) =>{
+        const current = e.target.currentTime
+        const duration = e.target.duration
+        //Calculate percentage
+        const roundedCurrent = Math.round(current);
+        const roundedDuration = Math.round(duration);
+        const animation = Math.round((roundedCurrent / roundedDuration )* 100)
+    
+        setSurahInfo({...surahInfo, currentTime: current,duration, animationPercentage:animation})
+      }
     const surahEndHandler = () => {
         let currentIndex = currentSurah.number - 1;
 
@@ -113,15 +125,6 @@ function App() {
         generateSurahAudioURL(currentIndex + 1);
     };
 
-    const songLoadHandler = () => {
-        if (firstLoaded) {
-            setFirstLoaded(false);
-        } else {
-            if (isPlaying) {
-                audio.current.play();
-            }
-        }
-    };
     return (
         <div>
             {loading ? (
@@ -142,6 +145,8 @@ function App() {
                         totalSeconds={totalSeconds}
                         currentSurah={currentSurah}
                         audio={audio}
+                        surahInfo={surahInfo}
+                        setSurahInfo={setSurahInfo}
                     />
                     <Library
                         surahs={surahs}
@@ -149,12 +154,11 @@ function App() {
                         generateSurahAudioURL={generateSurahAudioURL}
                     ></Library>
                     <audio
-                        onLoadedData={songLoadHandler}
                         ref={audio}
                         src={currentSurahAudio}
-                        onTimeUpdate={updateCurrentTime}
                         onEnded={surahEndHandler}
-                        controls
+                        onTimeUpdate={timeUpdateHandler}
+                        onLoadedMetadata={timeUpdateHandler}
                     ></audio>
                 </div>
             )}
