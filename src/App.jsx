@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Nav from "./components/Nav";
 import Library from "./components/library";
@@ -6,18 +6,24 @@ import Surah from "./components/Surah";
 import PLayer from "./components/Player";
 
 function App() {
-    const [surahs, setSurahs] = useState([]);
-    const [currentSurah, setCurrentSurah] = useState(1);
-    const [loading, setLoading] = useState(true);
+    // error and loading states
     const [error, setError] = useState(null);
-    const [elapsedSeconds, setElapsedSeconds] = useState(0);
-    const [totalSeconds, setTotalSeconds] = useState(0);
+    const [loading, setLoading] = useState(true);
+    // library and isPlaying states
+    const [libraryStatus, setLibraryStatus] = useState(true);
     const [isPlaying, setIsPlaying] = useState(false);
-    const audioContext = new AudioContext();
-    const [playingSurah, setPlayingSurah] = useState();
-    let sourceNode = null; // Keep track of the current audio source
+    // data states (surahs contains the text data and SurahsAudio contains audio data)
+    const [surahs, setSurahs] = useState([]);
+    const [surahsAudio, setSurahsAudio] = useState([]);
 
-    const [libraryStatus, setLibraryStatus] = useState(false);
+    const [currentSurah, setCurrentSurah] = useState();
+    const [currentSurahAudio, setCurrentSurahAudio] = useState(1);
+    const [currentTime, setCurrentTime] = useState();
+
+    const [totalSeconds, setTotalSeconds] = useState(0);
+    const audio = useRef(null);
+
+    const [firstLoaded, setFirstLoaded] = useState(true);
 
     useEffect(() => {
         const fetchSurahs = async () => {
@@ -28,6 +34,10 @@ function App() {
                 const { data } = await response.json();
                 const surahData = data.surahs;
                 setSurahs(surahData);
+                setCurrentSurah(surahData[1]);
+                setCurrentSurahAudio(
+                    "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/2.mp3"
+                );
                 setLoading(false);
             } catch (error) {
                 console.log(error);
@@ -35,83 +45,50 @@ function App() {
                 setLoading(false);
             }
         };
-
+        const fetchSurahsAudio = async () => {
+            try {
+                let data = [];
+                for (let i = 1; i < 114; i++) {
+                    data.push(
+                        `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${i}.mp3`
+                    );
+                }
+                setSurahsAudio(data);
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+                setError("Failed to fetch surahs. Please try again later.");
+                setLoading(false);
+            }
+        };
         fetchSurahs();
-        generateSurahAudioURL(112);
+        fetchSurahsAudio();
     }, []);
+    useEffect(() => {
+        if (currentSurahAudio) {
+            const playAudio = async () => {
+                try {
+                    if (isPlaying === true) {
+                        await audio.current.play();
+                        setIsPlaying(true);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            };
+
+            playAudio();
+        }
+    }, [currentSurahAudio, audio, isPlaying]);
 
     const generateSurahAudioURL = async (index) => {
-        console.log("insdie generate surah audio");
         try {
-            const response = await fetch(
-                `https://api.alquran.cloud/v1/surah/${index + 1}/ar.alafasy`
+            setCurrentSurahAudio(
+                `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${
+                    index + 1
+                }.mp3`
             );
-            const { data } = await response.json();
-            const surahData = data;
-
-            const audioUrls = surahData.ayahs.map((ayah) => ayah.audio);
-
-            const audioBufferPromises = audioUrls.map((url) => {
-                return fetch(url)
-                    .then((response) => response.arrayBuffer())
-                    .then((arrayBuffer) =>
-                        audioContext.decodeAudioData(arrayBuffer)
-                    );
-            });
-
-            const audioBuffers = await Promise.all(audioBufferPromises);
-
-            const mergedBuffer = mergeAudioBuffers(audioBuffers);
-
-            if (sourceNode !== null) {
-                // sourceNode.stop();
-                sourceNode.disconnect();
-            }
-            sourceNode = audioContext.createBufferSource();
-            sourceNode.buffer = mergedBuffer;
-
-            sourceNode.connect(audioContext.destination);
-            setLoading(false);
-
-            let totalDuration = audioBuffers.reduce(
-                (sum, buffer) => sum + buffer.duration,
-                0
-            );
-
-            // const startTime = performance.now();
-            // const endTime = performance.now();
-            // const calculationTime = endTime - startTime;
-
-            const hours = Math.floor(totalDuration / 3600);
-            const minutes = Math.floor((totalDuration % 3600) / 60);
-            const seconds = Math.floor(totalDuration % 60);
-
-            let formattedDuration = "";
-
-            if (hours > 0) {
-                formattedDuration += `${hours.toString().padStart(2, "0")}:`;
-            }
-
-            if (minutes > 0 || hours > 0 || seconds > 0) {
-                formattedDuration += `${minutes.toString().padStart(2, "0")}:`;
-            }
-
-            formattedDuration += `${seconds.toString().padStart(2, "0")}`;
-
-            setTotalSeconds(formattedDuration);
-            setCurrentSurah(data);
-            
-            // Start updating elapsed time continuously
-            // sourceNode.start();
-            if (!isPlaying) {
-                requestAnimationFrame(updateElapsedTime);
-            }
-            // console.log("Total time (in seconds):", totalDuration);
-            // console.log("Calculation time (in milliseconds):", calculationTime);
-
-            // console.log(data);
-            // console.log(sourceNode);
-            setPlayingSurah(mergedBuffer);
+            setCurrentSurah(surahs[index]);
         } catch (err) {
             console.log(err);
             setError("Failed to fetch surah audio. Please try again later.");
@@ -119,56 +96,32 @@ function App() {
         }
     };
 
-    const mergeAudioBuffers = (audioBuffers) => {
-        const numberOfChannels = audioBuffers[0].numberOfChannels;
-        const mergedBufferLength = audioBuffers.reduce(
-            (length, buffer) => length + buffer.length,
-            0
-        );
-        const sampleRate = audioBuffers[0].sampleRate;
-        const mergedBuffer = audioContext.createBuffer(
-            numberOfChannels,
-            mergedBufferLength,
-            sampleRate
-        );
-
-        for (let channel = 0; channel < numberOfChannels; channel++) {
-            const channelData = mergedBuffer.getChannelData(channel);
-            let offset = 0;
-            for (const buffer of audioBuffers) {
-                const bufferData = buffer.getChannelData(channel);
-                channelData.set(bufferData, offset);
-                offset += bufferData.length;
-            }
+    const updateCurrentTime = () => {
+        if (audio.current && !audio.current.seeking) {
+            const currentTime = parseInt(audio.current.currentTime);
+            setCurrentTime(currentTime);
         }
-
-        return mergedBuffer;
     };
 
-    const updateElapsedTime = () => {
-        if (sourceNode && sourceNode.context.state === "running") {
-            const currentTime = Math.floor(sourceNode.context.currentTime);
-            const minutes = Math.floor(currentTime / 60);
-            const seconds = currentTime % 60;
-            let formattedTime = `${minutes
-                .toString()
-                .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    const surahEndHandler = () => {
+        let currentIndex = currentSurah.number - 1;
 
-            if (minutes >= 60) {
-                const hours = Math.floor(minutes / 60);
-                const remainingMinutes = minutes % 60;
-                formattedTime = `${hours
-                    .toString()
-                    .padStart(2, "0")}:${remainingMinutes
-                    .toString()
-                    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-            }
-
-            setElapsedSeconds(formattedTime);
+        if (currentSurah.number === 114) {
+            currentIndex = -1;
         }
-        requestAnimationFrame(updateElapsedTime);
+
+        generateSurahAudioURL(currentIndex + 1);
     };
 
+    const songLoadHandler = () => {
+        if (firstLoaded) {
+            setFirstLoaded(false);
+        } else {
+            if (isPlaying) {
+                audio.current.play();
+            }
+        }
+    };
     return (
         <div>
             {loading ? (
@@ -181,22 +134,28 @@ function App() {
                         libraryStatus={libraryStatus}
                         setLibraryStatus={setLibraryStatus}
                     />
-                    <Surah currentSurah={currentSurah} />
+                    {currentSurah && <Surah currentSurah={currentSurah} />}
                     <PLayer
                         isPlaying={isPlaying}
                         setIsPlaying={setIsPlaying}
                         generateSurahAudioURL={generateSurahAudioURL}
-                        playingSurah={playingSurah}
                         totalSeconds={totalSeconds}
-                        elapsedSeconds={elapsedSeconds}
-                        audioContext={audioContext}
                         currentSurah={currentSurah}
+                        audio={audio}
                     />
                     <Library
                         surahs={surahs}
                         libraryStatus={libraryStatus}
                         generateSurahAudioURL={generateSurahAudioURL}
                     ></Library>
+                    <audio
+                        onLoadedData={songLoadHandler}
+                        ref={audio}
+                        src={currentSurahAudio}
+                        onTimeUpdate={updateCurrentTime}
+                        onEnded={surahEndHandler}
+                        controls
+                    ></audio>
                 </div>
             )}
         </div>
