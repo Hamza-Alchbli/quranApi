@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 import Nav from "./components/Nav";
-import Library from "./components/library";
+import Library from "./components/Library";
 import Surah from "./components/Surah";
 import PLayer from "./components/Player";
 
@@ -99,12 +99,6 @@ function App() {
         }
     };
 
-    const updateCurrentTime = () => {
-        if (audio.current && !audio.current.seeking) {
-            const currentTime = parseInt(audio.current.currentTime);
-            setCurrentTime(currentTime);
-        }
-    };
     const timeUpdateHandler = (e) =>{
         const current = e.target.currentTime
         const duration = e.target.duration
