@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 
-import Nav from "./components/Nav";
-import Library from "./components/Library";
-import Surah from "./components/Surah";
-import PLayer from "./components/Player";
+import Nav from "./components/Nav.jsx";
+import Library from "./components/Library.jsx";
+import Surah from "./components/Surah.jsx";
+import PLayer from "./components/Player.jsx";
 
 function App() {
     // error and loading states

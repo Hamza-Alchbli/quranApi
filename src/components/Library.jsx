@@ -1,4 +1,4 @@
-import LibrarySurah from "./LibrarySurah";
+import LibrarySurah from "./LibrarySurah.jsx";
 
 function Library({ surahs, libraryStatus, generateSurahAudioURL }) {
     return (
