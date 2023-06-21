@@ -4,7 +4,14 @@ import PropTypes from "prop-types";
 
 import LibrarySurah from "./LibrarySurah.jsx";
 
-function Library({ surahs, libraryStatus, generateSurahAudioURL }) {
+function Library({
+    surahs,
+    libraryStatus,
+    generateSurahAudioURL,
+    currentSurah,
+    playSongHandler,
+    isPlaying,
+}) {
     const [searchTerm, setSearchTerm] = useState("");
 
     const handleSearch = (event) => {
@@ -47,6 +54,9 @@ function Library({ surahs, libraryStatus, generateSurahAudioURL }) {
                             generateSurahAudioURL={generateSurahAudioURL}
                             surah={surah}
                             index={index}
+                            currentSurah={currentSurah}
+                            playSongHandler={playSongHandler}
+                            isPlaying={isPlaying}
                         />
                     );
                 }
@@ -60,5 +70,8 @@ Library.propTypes = {
     surahs: PropTypes.array.isRequired,
     libraryStatus: PropTypes.bool.isRequired,
     generateSurahAudioURL: PropTypes.func.isRequired,
+    currentSurah: PropTypes.object.isRequired,
+    playSongHandler: PropTypes.func.isRequired,
+    isPlaying: PropTypes.bool.isRequired,
 };
 export default Library;

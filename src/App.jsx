@@ -73,6 +73,10 @@ function App() {
                 }.mp3`
             );
             setCurrentSurah(surahs[index]);
+            if (libraryStatus) {
+                setLibraryStatus(!libraryStatus);
+            }
+            console.log(currentSurah);
         } catch (err) {
             console.log(err);
             setError("Failed to fetch surah audio. Please try again later.");
@@ -105,7 +109,15 @@ function App() {
 
         generateSurahAudioURL(currentIndex + 1);
     };
-
+    const playSongHandler = () => {
+        if (isPlaying) {
+            audio.current.pause();
+            setIsPlaying(!isPlaying);
+        } else {
+            audio.current.play();
+            setIsPlaying(!isPlaying);
+        }
+    };
     return (
         <div>
             {loading ? (
@@ -127,11 +139,15 @@ function App() {
                         audio={audio}
                         surahInfo={surahInfo}
                         setSurahInfo={setSurahInfo}
+                        playSongHandler={playSongHandler}
                     />
                     <Library
                         surahs={surahs}
                         libraryStatus={libraryStatus}
                         generateSurahAudioURL={generateSurahAudioURL}
+                        currentSurah={currentSurah}
+                        playSongHandler={playSongHandler}
+                        isPlaying={isPlaying}
                     ></Library>
                     <audio
                         ref={audio}

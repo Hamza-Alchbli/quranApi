@@ -10,22 +10,14 @@ import {
 
 function PLayer({
     isPlaying,
-    setIsPlaying,
     generateSurahAudioURL,
     currentSurah,
     audio,
     surahInfo,
     setSurahInfo,
+    playSongHandler,
 }) {
-    const playSongHandler = () => {
-        if (isPlaying) {
-            audio.current.pause();
-            setIsPlaying(!isPlaying);
-        } else {
-            audio.current.play();
-            setIsPlaying(!isPlaying);
-        }
-    };
+
     const skipHandler = async (dir) => {
         let currentIndex = currentSurah.number - 1;
 
@@ -83,7 +75,7 @@ function PLayer({
                                 className="animate-track"
                             ></div>
                         </div>
-                        <p>{getTime(surahInfo.duration)}</p>
+                        <p>{surahInfo.duration ? getTime(surahInfo.duration) : "00:00"}</p>
                     </div>
                     <div className="play-control">
                         <FontAwesomeIcon
@@ -115,7 +107,7 @@ function PLayer({
 
 PLayer.propTypes = {
     isPlaying: PropTypes.bool.isRequired,
-    setIsPlaying: PropTypes.func.isRequired,
+    playSongHandler: PropTypes.func.isRequired,
     generateSurahAudioURL: PropTypes.func.isRequired,
     currentSurah: PropTypes.shape({
         number: PropTypes.number.isRequired,
