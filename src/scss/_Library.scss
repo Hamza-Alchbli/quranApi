@@ -10,9 +10,39 @@
     transform: translateX(-100%);
     transition: all 0.5s ease;
     opacity: 0;
+    display: flex;
+    flex-direction: column;
     h2 {
         padding: 2rem;
     }
+    input {
+        width: 80%;
+        margin: 0 auto;
+        padding: 0.5rem 1rem;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem; /* increase the font size for better readability */
+        color: #333; /* dark color for text */
+        background-color: #f5f5f5; /* light grey color for input background */
+        transition: all 0.3s ease; /* smooth transition for hover and focus effects */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* subtle shadow for a 3D effect */
+    
+        &:focus {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* more shadow on focus */
+            border: none;
+        }
+    
+        &:hover {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* more shadow on hover */
+        }
+    
+        /* For devices with larger screen */
+        @media (min-width: 768px) {
+            width: 80%;
+        }
+    }
+    
 }
 
 .library-surahs {
