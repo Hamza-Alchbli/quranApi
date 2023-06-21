@@ -16,8 +16,8 @@ function PLayer({
     surahInfo,
     setSurahInfo,
     playSongHandler,
+    reciter,
 }) {
-
     const skipHandler = async (dir) => {
         let currentIndex = currentSurah.number - 1;
 
@@ -25,13 +25,13 @@ function PLayer({
             if (currentSurah.number == 114) {
                 currentIndex = -1;
             }
-            await generateSurahAudioURL(currentIndex + 1);
+            await generateSurahAudioURL(currentIndex + 1, reciter);
         }
         if (dir === "skip-back") {
             if (currentIndex == 0) {
                 currentIndex = 114;
             }
-            await generateSurahAudioURL(currentIndex - 1);
+            await generateSurahAudioURL(currentIndex - 1, reciter);
             if (isPlaying) audio.current.play();
             return;
         }
@@ -75,7 +75,11 @@ function PLayer({
                                 className="animate-track"
                             ></div>
                         </div>
-                        <p>{surahInfo.duration ? getTime(surahInfo.duration) : "00:00"}</p>
+                        <p>
+                            {surahInfo.duration
+                                ? getTime(surahInfo.duration)
+                                : "00:00"}
+                        </p>
                     </div>
                     <div className="play-control">
                         <FontAwesomeIcon
@@ -122,7 +126,7 @@ PLayer.propTypes = {
         animationPercentage: PropTypes.number.isRequired,
     }).isRequired,
     setSurahInfo: PropTypes.func.isRequired,
+    reciter: PropTypes.string.isRequired,
 };
-
 
 export default PLayer;

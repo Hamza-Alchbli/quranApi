@@ -7,12 +7,13 @@ function LibrarySurah({
     playSongHandler,
     isPlaying,
     currentSurah,
+    reciter
 }) {
     return (
         <div
             className={currentSurah.englishName == surah.englishName ? "library-surahs selected" : "library-surahs"}
             onClick={() => {
-                generateSurahAudioURL(index);
+                generateSurahAudioURL(index,reciter);
                 if (!isPlaying) {
                     playSongHandler();
                 }
@@ -39,5 +40,6 @@ LibrarySurah.propTypes = {
     playSongHandler: PropTypes.func.isRequired,
     isPlaying: PropTypes.bool.isRequired,
     currentSurah: PropTypes.object.isRequired,
+    reciter: PropTypes.string.isRequired,
 };
 export default LibrarySurah;

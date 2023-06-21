@@ -18,6 +18,8 @@ function App() {
     const audio = useRef(null);
     const [currentSurah, setCurrentSurah] = useState();
     const [currentSurahAudio, setCurrentSurahAudio] = useState(1);
+    const [reciter, setReciter] = useState("mishari_al_afasy");
+
     const [surahInfo, setSurahInfo] = useState({
         currentTime: 0,
         duration: 0,
@@ -65,10 +67,10 @@ function App() {
         }
     }, [currentSurahAudio, audio, isPlaying]);
 
-    const generateSurahAudioURL = async (index) => {
+    const generateSurahAudioURL = async (index,reciter="mishari_al_afasy") => {
         try {
             setCurrentSurahAudio(
-                `https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/${
+                `https://download.quranicaudio.com/qdc/${reciter}/murattal/${
                     index + 1
                 }.mp3`
             );
@@ -76,7 +78,6 @@ function App() {
             if (libraryStatus) {
                 setLibraryStatus(!libraryStatus);
             }
-            console.log(currentSurah);
         } catch (err) {
             console.log(err);
             setError("Failed to fetch surah audio. Please try again later.");
@@ -130,7 +131,7 @@ function App() {
                         libraryStatus={libraryStatus}
                         setLibraryStatus={setLibraryStatus}
                     />
-                    {currentSurah && <Surah currentSurah={currentSurah} />}
+                    {currentSurah && <Surah currentSurah={currentSurah} reciter={reciter} />}
                     <PLayer
                         isPlaying={isPlaying}
                         setIsPlaying={setIsPlaying}
@@ -140,6 +141,7 @@ function App() {
                         surahInfo={surahInfo}
                         setSurahInfo={setSurahInfo}
                         playSongHandler={playSongHandler}
+                        reciter={reciter}
                     />
                     <Library
                         surahs={surahs}
@@ -148,6 +150,8 @@ function App() {
                         currentSurah={currentSurah}
                         playSongHandler={playSongHandler}
                         isPlaying={isPlaying}
+                        reciter={reciter}
+                        setReciter={setReciter}
                     ></Library>
                     <audio
                         ref={audio}

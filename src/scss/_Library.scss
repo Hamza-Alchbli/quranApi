@@ -12,11 +12,11 @@
     opacity: 0;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
     h2 {
         padding: 2rem;
     }
-    input {
+    input,select,option {
         width: 80%;
         margin: 0 auto;
         padding: 0.5rem 1rem;
@@ -24,26 +24,26 @@
         border: none;
         border-radius: 5px;
         font-size: 1rem;
-        color: #333; 
-        background-color: #f5f5f5; 
-        transition: all 0.3s ease; 
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
-    
+        color: #333;
+        background-color: #f5f5f5;
+        transition: all 0.3s ease;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
         &:focus {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             border: none;
         }
-    
+
         &:hover {
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
-    
+
         /* For devices with larger screen */
         @media (min-width: 768px) {
             width: 80%;
         }
     }
-    
+
 }
 
 .library-surahs {

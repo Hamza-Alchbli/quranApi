@@ -11,9 +11,10 @@ function Library({
     currentSurah,
     playSongHandler,
     isPlaying,
+    reciter,
+    setReciter,
 }) {
     const [searchTerm, setSearchTerm] = useState("");
-
     const handleSearch = (event) => {
         setSearchTerm(removeDiacritics(event.target.value));
     };
@@ -23,6 +24,10 @@ function Library({
             /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u08D4-\u08E1\u08D4-\u08ED\u08F0-\u08FF]/g,
             ""
         );
+    };
+    const handleReciterChange = (event) => {
+        setReciter(event.target.value);
+        generateSurahAudioURL(currentSurah.number - 1, event.target.value);
     };
 
     return (
@@ -35,7 +40,14 @@ function Library({
                 value={searchTerm}
                 onChange={handleSearch}
             />
-            {/* <FontAwesomeIcon icon={faSearch} /> */}
+                <select onChange={handleReciterChange}>
+                    <option value="mishari_al_afasy">
+                        Mishary rashid alafasy || مشاري بن راشد العفاسي
+                    </option>
+                    <option value="abdul_baset">
+                        abdul_baset || عبد الباسط عبد الصمد
+                    </option>
+                </select>
             {surahs.map((surah, index) => {
                 const searchTermLower = searchTerm.toLowerCase();
                 const surahNameNormalized = removeDiacritics(
@@ -57,6 +69,7 @@ function Library({
                             currentSurah={currentSurah}
                             playSongHandler={playSongHandler}
                             isPlaying={isPlaying}
+                            reciter={reciter}
                         />
                     );
                 }
@@ -73,5 +86,7 @@ Library.propTypes = {
     currentSurah: PropTypes.object.isRequired,
     playSongHandler: PropTypes.func.isRequired,
     isPlaying: PropTypes.bool.isRequired,
+    reciter: PropTypes.string.isRequired,
+    setReciter: PropTypes.func.isRequired
 };
 export default Library;
