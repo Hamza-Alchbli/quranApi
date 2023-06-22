@@ -5,10 +5,11 @@ import Library from "./components/Library.jsx";
 import Surah from "./components/Surah.jsx";
 import PLayer from "./components/Player.jsx";
 
+import useLoadingStatus from "./components/hooks/useLoadingStatus.jsx";
+
 function App() {
+    const { error,loading,setLoading, setError } = useLoadingStatus();
     // error and loading states
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
     // library and isPlaying states
     const [libraryStatus, setLibraryStatus] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);

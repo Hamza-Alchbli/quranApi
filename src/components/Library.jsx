@@ -42,7 +42,9 @@ function Library({
             />
 
             <select onChange={handleReciterChange}>
-            <option value="mishari_al_afasy" disabled hidden>Choose Reciter || اختيار القارئ</option>
+                <option value="mishari_al_afasy" disabled hidden>
+                    Choose Reciter || اختيار القارئ
+                </option>
                 <option value="mishari_al_afasy">
                     Mishary rashid alafasy || مشاري بن راشد العفاسي
                 </option>
@@ -87,6 +89,9 @@ function Library({
         </div>
     );
 }
+Library.defaultProps = {
+    currentSurah: {}, // Provide a default value (empty object in this case)
+};
 
 Library.propTypes = {
     surahs: PropTypes.array.isRequired,
