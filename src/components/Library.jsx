@@ -40,14 +40,23 @@ function Library({
                 value={searchTerm}
                 onChange={handleSearch}
             />
-                <select onChange={handleReciterChange}>
-                    <option value="mishari_al_afasy">
-                        Mishary rashid alafasy || مشاري بن راشد العفاسي
-                    </option>
-                    <option value="abdul_baset">
-                        abdul_baset || عبد الباسط عبد الصمد
-                    </option>
-                </select>
+
+            <select onChange={handleReciterChange}>
+            <option value="mishari_al_afasy" disabled hidden>Choose Reciter || اختيار القارئ</option>
+                <option value="mishari_al_afasy">
+                    Mishary rashid alafasy || مشاري بن راشد العفاسي
+                </option>
+                <option value="abdul_baset">
+                    Abdul Basit Abdul Samad || عبد الباسط عبد الصمد
+                </option>
+                <option value="siddiq_minshawi">
+                    Mohamed Siddiq El-Minshawi || محمد صديق المنشاوي
+                </option>
+                <option value="khalil_al_husary">
+                    Mahmoud Khalil Al-Hussary || محمود خليل الحصري
+                </option>
+            </select>
+
             {surahs.map((surah, index) => {
                 const searchTermLower = searchTerm.toLowerCase();
                 const surahNameNormalized = removeDiacritics(
@@ -87,6 +96,6 @@ Library.propTypes = {
     playSongHandler: PropTypes.func.isRequired,
     isPlaying: PropTypes.bool.isRequired,
     reciter: PropTypes.string.isRequired,
-    setReciter: PropTypes.func.isRequired
+    setReciter: PropTypes.func.isRequired,
 };
 export default Library;

@@ -108,7 +108,7 @@ function App() {
             currentIndex = -1;
         }
 
-        generateSurahAudioURL(currentIndex + 1);
+        generateSurahAudioURL(currentIndex + 1, reciter);
     };
     const playSongHandler = () => {
         if (isPlaying) {
