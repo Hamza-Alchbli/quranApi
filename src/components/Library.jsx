@@ -64,6 +64,11 @@ function Library({
                 const surahNameNormalized = removeDiacritics(
                     surah.name
                 ).normalize("NFD");
+
+                if (surah.englishName === "Al-Faatiha") {
+                    surah.name = "سُورَةُ الْفَاتِحَةِ";
+                }
+
                 if (
                     surah.englishName.toLowerCase().includes(searchTermLower) ||
                     surah.englishNameTranslation
