@@ -1,8 +1,11 @@
-import {  useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import useLoadingStatus from "./useLoadingStatus";
 
-export const useSurahs = ({ setCurrentSurahAudio, setCurrentSurah,setSurahs }) => {
+export const useSurahs = () => {
+    const [surahs, setSurahs] = useState([]);
+    const [currentSurah, setCurrentSurah] = useState();
+    const [currentSurahAudio, setCurrentSurahAudio] = useState(1);
 
     const { setLoading, setError } = useLoadingStatus();
 
@@ -29,4 +32,11 @@ export const useSurahs = ({ setCurrentSurahAudio, setCurrentSurah,setSurahs }) =
 
         fetchSurahs();
     }, []);
+    return {
+        surahs,
+        currentSurah,
+        setCurrentSurah,
+        currentSurahAudio,
+        setCurrentSurahAudio,
+    };
 };

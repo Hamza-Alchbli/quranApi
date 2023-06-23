@@ -6,19 +6,25 @@ import Surah from "./components/Surah.jsx";
 import PLayer from "./components/Player.jsx";
 
 import useLoadingStatus from "./components/hooks/useLoadingStatus.jsx";
+import { useSurahs } from "./components/hooks/useSurahs.jsx";
 
 function App() {
-    const { error,loading,setLoading, setError } = useLoadingStatus();
+    const { error, loading, setLoading, setError } = useLoadingStatus();
+    const {
+        surahs,
+        currentSurah,
+        setCurrentSurah,
+        currentSurahAudio,
+        setCurrentSurahAudio,
+    } = useSurahs();
+
     // error and loading states
     // library and isPlaying states
     const [libraryStatus, setLibraryStatus] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     // data states (surahs contains the text data and SurahsAudio contains audio data)
-    const [surahs, setSurahs] = useState([]);
     // curent surah data and audio
     const audio = useRef(null);
-    const [currentSurah, setCurrentSurah] = useState();
-    const [currentSurahAudio, setCurrentSurahAudio] = useState(1);
     const [reciter, setReciter] = useState("mishari_al_afasy");
 
     const [surahInfo, setSurahInfo] = useState({
@@ -26,30 +32,6 @@ function App() {
         duration: 0,
         animationPercentage: 0,
     });
-
-    useEffect(() => {
-        const fetchSurahs = async () => {
-            try {
-                const response = await fetch(
-                    "https://api.alquran.cloud/v1/quran/en.asad"
-                );
-                const { data } = await response.json();
-                const surahData = data.surahs;
-                setSurahs(surahData);
-                setCurrentSurah(surahData[0]);
-                setCurrentSurahAudio(
-                    "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/1.mp3"
-                );
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-                setError("Failed to fetch surahs. Please try again later.");
-                setLoading(false);
-            }
-        };
-
-        fetchSurahs();
-    }, []);
 
     useEffect(() => {
         if (currentSurahAudio) {
@@ -68,7 +50,10 @@ function App() {
         }
     }, [currentSurahAudio, audio, isPlaying]);
 
-    const generateSurahAudioURL = async (index,reciter="mishari_al_afasy") => {
+    const generateSurahAudioURL = async (
+        index,
+        reciter = "mishari_al_afasy"
+    ) => {
         try {
             setCurrentSurahAudio(
                 `https://download.quranicaudio.com/qdc/${reciter}/murattal/${
@@ -132,7 +117,9 @@ function App() {
                         libraryStatus={libraryStatus}
                         setLibraryStatus={setLibraryStatus}
                     />
-                    {currentSurah && <Surah currentSurah={currentSurah} reciter={reciter} />}
+                    {currentSurah && (
+                        <Surah currentSurah={currentSurah} reciter={reciter} />
+                    )}
                     <PLayer
                         isPlaying={isPlaying}
                         setIsPlaying={setIsPlaying}
