@@ -87,9 +87,9 @@ function App() {
     };
 
     const surahEndHandler = () => {
-        let currentIndex = currentSurah.number - 1;
+        let currentIndex = currentSurah.id - 1;
 
-        if (currentSurah.number === 114) {
+        if (currentSurah.id === 114) {
             currentIndex = -1;
         }
 
