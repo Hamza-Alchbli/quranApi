@@ -10,22 +10,23 @@ import { useSurahs } from "./components/hooks/useSurahs.jsx";
 
 function App() {
     const { error, loading, setLoading, setError } = useLoadingStatus();
+    const [reciter, setReciter] = useState("mishari_al_afasy");
+    const [currentIndex,setCurrentIndex] = useState(1);
+
     const {
         surahs,
         currentSurah,
         setCurrentSurah,
         currentSurahAudio,
         setCurrentSurahAudio,
-    } = useSurahs();
-
-    // error and loading states
-    // library and isPlaying states
+        setLang,
+        lang,
+    } = useSurahs({reciter,currentIndex});
+    // console.log(currentIndex);
     const [libraryStatus, setLibraryStatus] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
-    // data states (surahs contains the text data and SurahsAudio contains audio data)
-    // curent surah data and audio
+
     const audio = useRef(null);
-    const [reciter, setReciter] = useState("mishari_al_afasy");
 
     const [surahInfo, setSurahInfo] = useState({
         currentTime: 0,
@@ -61,9 +62,7 @@ function App() {
                 }.mp3`
             );
             setCurrentSurah(surahs[index]);
-            if (libraryStatus) {
-                setLibraryStatus(!libraryStatus);
-            }
+
         } catch (err) {
             console.log(err);
             setError("Failed to fetch surah audio. Please try again later.");
@@ -130,6 +129,7 @@ function App() {
                         setSurahInfo={setSurahInfo}
                         playSongHandler={playSongHandler}
                         reciter={reciter}
+                        setCurrentIndex={setCurrentIndex}
                     />
                     <Library
                         surahs={surahs}
@@ -140,6 +140,10 @@ function App() {
                         isPlaying={isPlaying}
                         reciter={reciter}
                         setReciter={setReciter}
+                        setLang={setLang}
+                        lang={lang}
+                        setCurrentIndex={setCurrentIndex}
+                        setLibraryStatus={setLibraryStatus}
                     ></Library>
                     <audio
                         ref={audio}

@@ -17,21 +17,26 @@ function PLayer({
     setSurahInfo,
     playSongHandler,
     reciter,
+    setCurrentIndex,
 }) {
     const skipHandler = async (dir) => {
-        let currentIndex = currentSurah.number - 1;
+        let currentIndex = currentSurah.id - 1;
 
         if (dir === "skip-forward") {
-            if (currentSurah.number == 114) {
+            if (currentSurah.id == 114) {
                 currentIndex = -1;
             }
             await generateSurahAudioURL(currentIndex + 1, reciter);
+            // console.log(currentSurah);
+            setCurrentIndex(currentSurah.id + 1 );
         }
         if (dir === "skip-back") {
             if (currentIndex == 0) {
                 currentIndex = 114;
+               
             }
             await generateSurahAudioURL(currentIndex - 1, reciter);
+            setCurrentIndex(currentIndex);
             if (isPlaying) audio.current.play();
             return;
         }
@@ -114,7 +119,7 @@ PLayer.propTypes = {
     playSongHandler: PropTypes.func.isRequired,
     generateSurahAudioURL: PropTypes.func.isRequired,
     currentSurah: PropTypes.shape({
-        number: PropTypes.number.isRequired,
+        id: PropTypes.number.isRequired,
         // Add other prop types for the `currentSurah` object if needed
     }),
     audio: PropTypes.shape({
@@ -127,6 +132,7 @@ PLayer.propTypes = {
     }).isRequired,
     setSurahInfo: PropTypes.func.isRequired,
     reciter: PropTypes.string.isRequired,
+    setCurrentIndex: PropTypes.func,
 };
 
 export default PLayer;
