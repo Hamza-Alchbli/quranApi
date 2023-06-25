@@ -11,7 +11,6 @@ function LibrarySurah({
     libraryStatus,
     setLibraryStatus,
 }) {
-
     const selectSurah = () => {
         generateSurahAudioURL(index, reciter);
         setCurrentIndex(index + 1);
@@ -24,7 +23,6 @@ function LibrarySurah({
         }
     };
 
-
     return (
         <div
             className={
@@ -32,9 +30,10 @@ function LibrarySurah({
                     ? "library-surahs selected"
                     : "library-surahs"
             }
+            onClick={selectSurah}
         >
-            <img src="/quran-ar.webp" alt="quran" onClick={selectSurah} />
-            <div className="surah-info" onClick={selectSurah}>
+            <img src="/quran-ar.webp" alt="quran" />
+            <div className="surah-info">
                 <h3>{surah.name_arabic}</h3>
                 <p>
                     {surah.name_simple} || {surah.translated_name.name}

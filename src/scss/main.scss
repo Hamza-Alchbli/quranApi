@@ -4,8 +4,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-* {
     scrollbar-width: thin;
     scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
 }
@@ -24,8 +22,10 @@ body {
     font-family: "Nunito", sans-serif;
     min-height: 100vh;
 }
-button {
+button,img {
     font-family: "Nunito", sans-serif;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 .App {
     transition: all 0.5s ease;
