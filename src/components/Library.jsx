@@ -3,7 +3,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 import LibrarySurah from "./LibrarySurah.jsx";
-import useAllLang from "./hooks/useAllLang.jsx";
+import LibOptions from "./LibOptions.jsx";
+
 function Library({
     surahs,
     libraryStatus,
@@ -17,9 +18,8 @@ function Library({
     setCurrentIndex,
     setLibraryStatus,
 }) {
-    const allLang = useAllLang();
-    // console.log(allLang);
     const [searchTerm, setSearchTerm] = useState("");
+
     const handleSearch = (event) => {
         setSearchTerm(removeDiacritics(event.target.value));
     };
@@ -30,14 +30,7 @@ function Library({
             ""
         );
     };
-    const handleReciterChange = (event) => {
-        setReciter(event.target.value);
-        generateSurahAudioURL(currentSurah.id - 1, event.target.value);
-    };
 
-    const handleLangChange = (event) => {
-        setLang(event.target.value);
-    };
     return (
         <div className={`library ${libraryStatus ? "active-library" : ""}`}>
             <h2>Quran Library</h2>
@@ -49,42 +42,13 @@ function Library({
                 onChange={handleSearch}
             />
 
-            <select onChange={handleReciterChange}>
-                <option value="mishari_al_afasy" disabled hidden>
-                    Choose Reciter || اختيار القارئ
-                </option>
-                <option value="mishari_al_afasy">
-                    Mishary rashid alafasy || مشاري بن راشد العفاسي
-                </option>
-                <option value="abdul_baset">
-                    Abdul Basit Abdul Samad || عبد الباسط عبد الصمد
-                </option>
-                <option value="siddiq_minshawi">
-                    Mohamed Siddiq El-Minshawi || محمد صديق المنشاوي
-                </option>
-                <option value="khalil_al_husary">
-                    Mahmoud Khalil Al-Hussary || محمود خليل الحصري
-                </option>
-            </select>
-            {allLang ? (
-                <select onChange={handleLangChange}>
-                    {allLang.map((lang, index) => {
-                        return (
-                            <option
-                                key={lang.iso_code + index}
-                                value={lang.iso_code}
-                            >
-                                {lang.name}{" "}
-                                {lang.native_name == ""
-                                    ? lang.native_name
-                                    : `|| ${lang.native_name}`}
-                            </option>
-                        );
-                    })}
-                </select>
-            ) : (
-                ""
-            )}
+            <LibOptions
+                setReciter={setReciter}
+                setLang={setLang}
+                currentSurah={currentSurah}
+                generateSurahAudioURL={generateSurahAudioURL}
+            />
+
             {surahs.map((surah, index) => {
                 const searchTermLower = searchTerm.toLowerCase();
                 const surahNameNormalized = removeDiacritics(
@@ -111,7 +75,6 @@ function Library({
                             setCurrentIndex={setCurrentIndex}
                             libraryStatus={libraryStatus}
                             setLibraryStatus={setLibraryStatus}
-        
                         />
                     );
                 }
@@ -120,6 +83,7 @@ function Library({
         </div>
     );
 }
+
 Library.defaultProps = {
     currentSurah: {}, // Provide a default value (empty object in this case)
 };
@@ -136,6 +100,7 @@ Library.propTypes = {
     setLang: PropTypes.func.isRequired,
     lang: PropTypes.string.isRequired,
     setCurrentIndex: PropTypes.func.isRequired,
-    setLibraryStatus:PropTypes.func.isRequired,
+    setLibraryStatus: PropTypes.func.isRequired,
 };
+
 export default Library;

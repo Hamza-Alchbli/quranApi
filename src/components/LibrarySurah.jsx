@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-
 function LibrarySurah({
     generateSurahAudioURL,
     surah,
@@ -12,6 +11,20 @@ function LibrarySurah({
     libraryStatus,
     setLibraryStatus,
 }) {
+
+    const selectSurah = () => {
+        generateSurahAudioURL(index, reciter);
+        setCurrentIndex(index + 1);
+
+        if (!isPlaying) {
+            playSongHandler();
+        }
+        if (libraryStatus) {
+            setLibraryStatus(!libraryStatus);
+        }
+    };
+
+
     return (
         <div
             className={
@@ -19,20 +32,9 @@ function LibrarySurah({
                     ? "library-surahs selected"
                     : "library-surahs"
             }
-            onClick={() => {
-                generateSurahAudioURL(index, reciter);
-                setCurrentIndex(index + 1);
-
-                if (!isPlaying) {
-                    playSongHandler();
-                }
-                if (libraryStatus) {
-                    setLibraryStatus(!libraryStatus);
-                }
-            }}
         >
-            <img src="/quran-ar.webp" alt="quran" />
-            <div className="surah-info">
+            <img src="/quran-ar.webp" alt="quran" onClick={selectSurah} />
+            <div className="surah-info" onClick={selectSurah}>
                 <h3>{surah.name_arabic}</h3>
                 <p>
                     {surah.name_simple} || {surah.translated_name.name}
@@ -55,7 +57,7 @@ LibrarySurah.propTypes = {
     currentSurah: PropTypes.object.isRequired,
     reciter: PropTypes.string.isRequired,
     setCurrentIndex: PropTypes.func,
-    setLibraryStatus:PropTypes.func.isRequired,
-    libraryStatus: PropTypes.bool.isRequired
+    setLibraryStatus: PropTypes.func.isRequired,
+    libraryStatus: PropTypes.bool.isRequired,
 };
 export default LibrarySurah;

@@ -104,6 +104,7 @@ function App() {
             setIsPlaying(!isPlaying);
         }
     };
+    
     return (
         <div>
             {loading ? (
@@ -144,6 +145,7 @@ function App() {
                         lang={lang}
                         setCurrentIndex={setCurrentIndex}
                         setLibraryStatus={setLibraryStatus}
+                        setCurrentSurah={setCurrentSurah}
                     ></Library>
                     <audio
                         ref={audio}
