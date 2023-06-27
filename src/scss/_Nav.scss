@@ -42,3 +42,19 @@ nav {
         }
     }
 }
+@media (prefers-color-scheme: dark) {
+    nav {
+        h1 {
+            color: white;
+        }
+        button {
+            
+            border: 2px solid rgb(228, 225, 225);
+            &:hover {
+                background-color: white;
+                color: #000;
+            }
+        }
+        
+    }
+}

@@ -10,8 +10,10 @@
 *::-webkit-scrollbar {
     width: 5px;
 }
+
 *::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: black;
+    height: 100%;
 }
 *::-webkit-scrollbar-thumb {
     background-color: rgba(155, 155, 155, 0.5);
@@ -22,7 +24,8 @@ body {
     font-family: "Nunito", sans-serif;
     min-height: 100vh;
 }
-button,img {
+button,
+img {
     font-family: "Nunito", sans-serif;
     user-select: none;
     -webkit-user-drag: none;
@@ -44,10 +47,30 @@ h4 {
     font-weight: 400;
     color: rgb(100, 100, 100);
 }
-p,button {
-    font-size: 1rem
+
+p,
+button {
+    font-size: 1rem;
 }
 @import "./Surah";
 @import "./Player";
 @import "./Library";
 @import "./Nav";
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    button {
+        color: white;
+    }
+    h3 {
+        color: #c7c7c7;
+    }
+}
