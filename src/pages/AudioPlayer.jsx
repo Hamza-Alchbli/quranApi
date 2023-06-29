@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
-import Library from "../components/Library.jsx";
-import Surah from "../components/Surah.jsx";
-import PLayer from "../components/Player.jsx";
+import Library from "../Library.jsx";
+import Surah from "../Surah.jsx";
+import PLayer from "../Player.jsx";
 
-import useLoadingStatus from "../components/hooks/useLoadingStatus.jsx";
-import { useSurahs } from "../components/hooks/useSurahs.jsx";
+import useLoadingStatus from "../hooks/useLoadingStatus.jsx";
+import { useSurahs } from "../hooks/useSurahs.jsx";
 
 function AudioPlayer({ setLibraryStatus, libraryStatus }) {
     const { error, loading, setLoading, setError } = useLoadingStatus();

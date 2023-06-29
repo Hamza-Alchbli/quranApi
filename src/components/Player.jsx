@@ -28,11 +28,12 @@ function PLayer({
             }
             await generateSurahAudioURL(currentIndex + 1, reciter);
             // console.log(currentSurah);
-            setCurrentIndex(currentSurah.id + 1);
+            setCurrentIndex(currentSurah.id + 1 );
         }
         if (dir === "skip-back") {
             if (currentIndex == 0) {
                 currentIndex = 114;
+               
             }
             await generateSurahAudioURL(currentIndex - 1, reciter);
             setCurrentIndex(currentIndex);
@@ -49,9 +50,8 @@ function PLayer({
         );
     };
     const dragHandler = (e) => {
-        const value = e.target.value || e.touches[0].clientX;
-        audio.current.currentTime = value;
-        setSurahInfo({ ...surahInfo, currentTime: parseInt(value) });
+        audio.current.currentTime = e.target.value;
+        setSurahInfo({ ...surahInfo, currentTime: parseInt(e.target.value) });
     };
     const trackAnim = {
         transform: `translateX(${surahInfo.animationPercentage}%)`,
@@ -71,22 +71,8 @@ function PLayer({
                             <input
                                 min={0}
                                 max={surahInfo.duration || 0}
-                                value={surahInfo.currentTime || 0}
+                                value={surahInfo.duration || 0}
                                 onChange={dragHandler}
-                                onMouseDown={dragHandler}
-                                onMouseMove={(e) => {
-                                    if (
-                                        e.buttons === 1 ||
-                                        e.buttons === undefined
-                                    ) {
-                                        dragHandler(e);
-                                    }
-                                }}
-                                onTouchStart={dragHandler}
-                                onTouchMove={(e) => {
-                                    dragHandler(e);
-                                    e.preventDefault();
-                                }}
                                 type="range"
                             />
                             <div
