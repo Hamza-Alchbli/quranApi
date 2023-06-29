@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useState } from "react";
 
 import Nav from "./components/Nav";
-import AudioPlayer from "./components/pages/AudioPlayer";
-import ReadingSection from "./components/pages/ReadingSection";
+import AudioPlayer from "./pages/AudioPlayer";
+import ReadingSection from "./pages/ReadingSection";
 import useLoadingStatus from "./components/hooks/useLoadingStatus.jsx";
 
 function App() {
