@@ -73,7 +73,7 @@ function PLayer({
                                 max={surahInfo.duration || 0}
                                 value={surahInfo.duration || 0}
                                 onChange={dragHandler}
-                                onTouchEnd={dragHandler}
+   
                                 type="range"
                             />
                             <div
