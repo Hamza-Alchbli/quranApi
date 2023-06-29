@@ -71,11 +71,22 @@ function PLayer({
                             <input
                                 min={0}
                                 max={surahInfo.duration || 0}
-                                value={surahInfo.duration || 0}
+                                value={surahInfo.currentTime || 0}
                                 onChange={dragHandler}
+                                onMouseDown={dragHandler}
+                                onMouseMove={(e) => {
+                                    if (
+                                        e.buttons === 1 ||
+                                        e.buttons === undefined
+                                    ) {
+                                        dragHandler(e);
+                                    }
+                                }}
                                 onTouchStart={dragHandler}
-                                onTouchMove={dragHandler}
-                                onTouchEnd={dragHandler}
+                                onTouchMove={(e) => {
+                                    dragHandler(e);
+                                    e.preventDefault();
+                                }}
                                 type="range"
                             />
                             <div
