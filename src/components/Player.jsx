@@ -28,12 +28,11 @@ function PLayer({
             }
             await generateSurahAudioURL(currentIndex + 1, reciter);
             // console.log(currentSurah);
-            setCurrentIndex(currentSurah.id + 1 );
+            setCurrentIndex(currentSurah.id + 1);
         }
         if (dir === "skip-back") {
             if (currentIndex == 0) {
                 currentIndex = 114;
-               
             }
             await generateSurahAudioURL(currentIndex - 1, reciter);
             setCurrentIndex(currentIndex);
@@ -50,8 +49,9 @@ function PLayer({
         );
     };
     const dragHandler = (e) => {
-        audio.current.currentTime = e.target.value;
-        setSurahInfo({ ...surahInfo, currentTime: parseInt(e.target.value) });
+        const value = e.target.value || e.touches[0].clientX;
+        audio.current.currentTime = value;
+        setSurahInfo({ ...surahInfo, currentTime: parseInt(value) });
     };
     const trackAnim = {
         transform: `translateX(${surahInfo.animationPercentage}%)`,
@@ -73,7 +73,9 @@ function PLayer({
                                 max={surahInfo.duration || 0}
                                 value={surahInfo.duration || 0}
                                 onChange={dragHandler}
-   
+                                onTouchStart={dragHandler}
+                                onTouchMove={dragHandler}
+                                onTouchEnd={dragHandler}
                                 type="range"
                             />
                             <div
