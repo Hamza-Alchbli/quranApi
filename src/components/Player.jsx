@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import Loader from "../components/Loader.jsx";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -108,7 +109,7 @@ function PLayer({
                     </div>
                 </>
             ) : (
-                <p>Loading..</p>
+                <Loader />
             )}
         </div>
     );

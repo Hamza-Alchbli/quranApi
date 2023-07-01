@@ -6,7 +6,7 @@ import Nav from "./components/Nav";
 import AudioPlayer from "./pages/AudioPlayer";
 import ReadingSection from "./pages/ReadingSection";
 import useLoadingStatus from "./components/hooks/useLoadingStatus.jsx";
-
+import Loader from "./components/Loader";
 function App() {
     const { error, loading } = useLoadingStatus();
     const [libraryStatus, setLibraryStatus] = useState(false);
@@ -14,7 +14,7 @@ function App() {
     return (
         <Router>
             {loading ? (
-                <p>Loading website...</p>
+                <Loader />
             ) : error ? (
                 <p>{error}</p>
             ) : (

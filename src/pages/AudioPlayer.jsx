@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Library from "../components/Library.jsx";
 import Surah from "../components/Surah.jsx";
 import PLayer from "../components/Player.jsx";
+import Loader from "../components/Loader.jsx";
 
 import useLoadingStatus from "../components/hooks/useLoadingStatus.jsx";
 import { useSurahs } from "../components/hooks/useSurahs.jsx";
@@ -107,7 +108,7 @@ function AudioPlayer({ setLibraryStatus, libraryStatus }) {
     return (
         <>
             {loading ? (
-                <p>Loading website...</p>
+                 <Loader />
             ) : error ? (
                 <p>{error}</p>
             ) : (
