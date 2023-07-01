@@ -5,6 +5,7 @@ const animations = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: 20 },
+    transition: { duration: .3},
 };
 
 const AnimatedPage = ({ children }) => {
@@ -14,7 +15,7 @@ const AnimatedPage = ({ children }) => {
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ duration: .3 }}
+            transition="transition"
             
         >
             {children}

@@ -8,6 +8,10 @@ nav {
         display: flex;
         gap: .5rem;
     }
+    a {
+        color: white;
+        text-decoration: none;
+    }
     button {
         display: flex;
         align-items: center;
@@ -18,10 +22,6 @@ nav {
         border: 2px solid rgb(65, 65, 65);
         padding: 1rem;
         transition: all 0.3s ease;
-        a {
-            color: white;
-            text-decoration: none;
-        }
 
         &:hover {
             background-color: rgb(65, 65, 65);
@@ -67,9 +67,6 @@ nav {
             &:hover {
                 background-color: #f2f2f2;
                 color: #000;
-                a {
-                    color: black;
-                }
             }
             a {
                 color: #f2f2f2;
