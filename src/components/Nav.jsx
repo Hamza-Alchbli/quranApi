@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-
+import { Link } from "react-router-dom";
 import { faQuran } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Nav({ libraryStatus, setLibraryStatus }) {
@@ -14,6 +14,12 @@ function Nav({ libraryStatus, setLibraryStatus }) {
                 <button onClick={() => setLibraryStatus(!libraryStatus)}>
                     Library
                     <FontAwesomeIcon icon={faQuran} size="lg" />
+                </button>
+                <button>
+                    <Link to="/">Listen</Link>
+                </button>
+                <button>
+                    <Link to="/read">Read</Link>
                 </button>
             </div>
         </nav>

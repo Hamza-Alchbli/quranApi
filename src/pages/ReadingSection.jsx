@@ -1,5 +1,11 @@
+import AnimatedPage from "../components/AnimatedPage";
+
 const ReadingSection = () => {
-    return (<h1>asdw</h1>)
+    return (
+        <AnimatedPage>
+            <h1>asdw</h1>
+        </AnimatedPage>
+    );
 };
 
-export default ReadingSection
+export default ReadingSection;

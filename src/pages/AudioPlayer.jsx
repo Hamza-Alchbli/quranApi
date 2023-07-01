@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import AnimatedPage from "../components/AnimatedPage";
+
 
 import Library from "../components/Library.jsx";
 import Surah from "../components/Surah.jsx";
@@ -106,7 +108,7 @@ function AudioPlayer({ setLibraryStatus, libraryStatus }) {
     };
 
     return (
-        <>
+        <AnimatedPage>
             {loading ? (
                  <Loader />
             ) : error ? (
@@ -152,7 +154,7 @@ function AudioPlayer({ setLibraryStatus, libraryStatus }) {
                     ></audio>
                 </>
             )}
-        </>
+        </AnimatedPage>
     );
 }
 AudioPlayer.propTypes = {
