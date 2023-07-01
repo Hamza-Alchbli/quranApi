@@ -21,7 +21,6 @@ function Nav({ libraryStatus, setLibraryStatus }) {
                 <Link to="/read">
                     <button>Read</button>
                 </Link> */}
-                
             </div>
         </nav>
     );
