@@ -15,12 +15,13 @@ function Nav({ libraryStatus, setLibraryStatus }) {
                     Library
                     <FontAwesomeIcon icon={faQuran} size="lg" />
                 </button>
-                <Link to="/">
+                {/* <Link to="/">
                     <button>Listen</button>
                 </Link>
                 <Link to="/read">
                     <button>Read</button>
-                </Link>
+                </Link> */}
+                
             </div>
         </nav>
     );
