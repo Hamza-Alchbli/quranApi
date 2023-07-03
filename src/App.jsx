@@ -48,7 +48,12 @@ function App() {
                                     path="/read"
                                     element={
                                         <AnimatedPage>
-                                            <ReadingSection />
+                                            <ReadingSection
+                                                {...{
+                                                    libraryStatus,
+                                                    setLibraryStatus,
+                                                }}
+                                            />
                                         </AnimatedPage>
                                     }
                                 />
