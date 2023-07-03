@@ -12,15 +12,17 @@ const LibOptions = ({
 
     const handleReciterChange = (event) => {
         setReciter(event.target.value);
-        generateSurahAudioURL(currentSurah.id - 1, event.target.value);
+        generateSurahAudioURL ?  generateSurahAudioURL(currentSurah.id - 1, event.target.value) : "";
+       
     };
 
     const handleLangChange = (event) => {
         setLang(event.target.value);
     };
+    
     return (
         <>
-            <select onChange={handleReciterChange}>
+            <select onChange={handleReciterChange} id="reciter">
                 <option value="mishari_al_afasy" disabled hidden>
                     Choose Reciter || اختيار القارئ
                 </option>
@@ -38,7 +40,7 @@ const LibOptions = ({
                 </option>
             </select>
             {allLang ? (
-                <select onChange={handleLangChange}>
+                <select onChange={handleLangChange} id="lang">
                     {allLang.map((lang, index) => {
                         return (
                             <option
@@ -59,11 +61,14 @@ const LibOptions = ({
         </>
     );
 };
-
+LibOptions.defaultProps = {
+    generateSurahAudioURL: null, // Provide a default value (null in this case)
+    currentSurah: {},
+};
 LibOptions.propTypes = {
     setReciter: PropTypes.func.isRequired,
     setLang: PropTypes.func.isRequired,
-    generateSurahAudioURL: PropTypes.func.isRequired,
+    generateSurahAudioURL: PropTypes.func,
     currentSurah: PropTypes.object.isRequired,
 }
 export default LibOptions;

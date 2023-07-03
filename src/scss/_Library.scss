@@ -62,6 +62,12 @@
         background-color: #c6eeff;
         transition: background 0.5s ease;
     }
+    .surah-info {
+        p:nth-child(3) {
+            // background-color: red;
+            font-size: .75rem;
+        }
+    }
 }
 .surah-description {
     padding-left: 1rem;
