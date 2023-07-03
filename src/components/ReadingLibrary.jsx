@@ -38,7 +38,7 @@ const ReadingLibrary = ({ libraryStatus, setLibraryStatus }) => {
             <LibOptions
                 {...{setReciter,setLang,currentSurah}}
             />
-            {console.log(currentSurah)}
+            {/* {console.log(currentSurah)} */}
             {surahs.map((surah, index) => {
                 const searchTermLower = searchTerm.toLowerCase();
                 const surahNameNormalized = removeDiacritics(
