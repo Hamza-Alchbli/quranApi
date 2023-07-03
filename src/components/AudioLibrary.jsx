@@ -2,10 +2,10 @@ import { useState } from "react";
 
 import PropTypes from "prop-types";
 
-import LibrarySurah from "./LibrarySurah.jsx";
+import LibrarySurah from "./AudioSurah.jsx";
 import LibOptions from "./LibOptions.jsx";
 
-function Library({
+function AudioLibrary({
     surahs,
     libraryStatus,
     generateSurahAudioURL,
@@ -36,6 +36,7 @@ function Library({
             <h2>Quran Library</h2>
 
             <input
+                id="search"
                 type="search"
                 placeholder="Search..."
                 value={searchTerm}
@@ -84,11 +85,11 @@ function Library({
     );
 }
 
-Library.defaultProps = {
+AudioLibrary.defaultProps = {
     currentSurah: {}, // Provide a default value (empty object in this case)
 };
 
-Library.propTypes = {
+AudioLibrary.propTypes = {
     surahs: PropTypes.array.isRequired,
     libraryStatus: PropTypes.bool.isRequired,
     generateSurahAudioURL: PropTypes.func.isRequired,
@@ -103,4 +104,4 @@ Library.propTypes = {
     setLibraryStatus: PropTypes.func.isRequired,
 };
 
-export default Library;
+export default AudioLibrary;

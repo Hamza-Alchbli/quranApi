@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-function LibrarySurah({
+function AudioSurah({
     generateSurahAudioURL,
     surah,
     index,
@@ -43,7 +43,7 @@ function LibrarySurah({
     );
 }
 
-LibrarySurah.propTypes = {
+AudioSurah.propTypes = {
     generateSurahAudioURL: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     surah: PropTypes.shape({
@@ -59,4 +59,4 @@ LibrarySurah.propTypes = {
     setLibraryStatus: PropTypes.func.isRequired,
     libraryStatus: PropTypes.bool.isRequired,
 };
-export default LibrarySurah;
+export default AudioSurah;
