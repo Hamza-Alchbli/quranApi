@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import AnimatedPage from "../components/AnimatedPage";
 
-
-import Library from "../components/Library.jsx";
+import AudioLibrary from "../components/AudioLibrary.jsx";
 import Surah from "../components/Surah.jsx";
 import PLayer from "../components/Player.jsx";
 import Loader from "../components/Loader.jsx";
@@ -110,41 +109,46 @@ function AudioPlayer({ setLibraryStatus, libraryStatus }) {
     return (
         <AnimatedPage>
             {loading ? (
-                 <Loader />
+                <Loader />
             ) : error ? (
                 <p>{error}</p>
             ) : (
                 <>
                     {currentSurah && (
-                        <Surah currentSurah={currentSurah} reciter={reciter} />
+                        <Surah {...{ currentSurah, reciter }} />
                     )}
                     <PLayer
-                        isPlaying={isPlaying}
-                        setIsPlaying={setIsPlaying}
-                        generateSurahAudioURL={generateSurahAudioURL}
-                        currentSurah={currentSurah}
-                        audio={audio}
-                        surahInfo={surahInfo}
-                        setSurahInfo={setSurahInfo}
-                        playSongHandler={playSongHandler}
-                        reciter={reciter}
-                        setCurrentIndex={setCurrentIndex}
+                        {...{
+                            isPlaying,
+                            setIsPlaying,
+                            generateSurahAudioURL,
+                            currentSurah,
+                            audio,
+                            surahInfo,
+                            setSurahInfo,
+                            playSongHandler,
+                            reciter,
+                            setCurrentIndex,
+                        }}
                     />
-                    <Library
-                        surahs={surahs}
-                        libraryStatus={libraryStatus}
-                        generateSurahAudioURL={generateSurahAudioURL}
-                        currentSurah={currentSurah}
-                        playSongHandler={playSongHandler}
-                        isPlaying={isPlaying}
-                        reciter={reciter}
-                        setReciter={setReciter}
-                        setLang={setLang}
-                        lang={lang}
-                        setCurrentIndex={setCurrentIndex}
-                        setLibraryStatus={setLibraryStatus}
-                        setCurrentSurah={setCurrentSurah}
-                    ></Library>
+                    <AudioLibrary
+                        {...{
+                            surahs,
+                            libraryStatus,
+                            generateSurahAudioURL,
+                            currentSurah,
+                            playSongHandler,
+                            isPlaying,
+                            reciter,
+                            setReciter,
+                            setLang,
+                            lang,
+                            setCurrentIndex,
+                            setLibraryStatus,
+                            setCurrentSurah,
+                        }}
+                    ></AudioLibrary>
+
                     <audio
                         ref={audio}
                         src={currentSurahAudio}
