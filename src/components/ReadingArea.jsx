@@ -58,9 +58,9 @@ const ReadingArea = () => {
                     {Object.keys(pageData).length > 0 ? (
                         <>
                             {pageData.map((aya) => {
-                                {
-                                    console.log(aya);
-                                }
+                                // {
+                                //     console.log(aya);
+                                // }
                                 return (
                                     <p key={aya.id}>
                                         {aya.words.map((word) => (
