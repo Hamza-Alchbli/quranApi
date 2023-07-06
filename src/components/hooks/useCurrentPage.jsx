@@ -14,8 +14,21 @@ const useCurrentPage = () => {
                 const data = await clonedResponse.json();
                 const pageData = data.verses;
                 // console.log(pageData);
-                setPageData(pageData);
                 setLoading(false);
+                
+                const pageWords = [];
+                const makePageWords = () => {
+                    if (Object.keys(pageData).length > 0) {
+                        pageData.map((aya) => {
+                            aya.words.map((word) => {
+                                pageWords.push(word);
+                            });
+                        });
+                    }
+                };
+                setPageData(pageWords);
+                makePageWords();
+                
             } catch (error) {
                 console.log(error);
                 setError("Failed to fetch langs. Please try again later.");
@@ -24,10 +37,9 @@ const useCurrentPage = () => {
         };
 
         fetchPageData();
-
     }, [setError, setLoading]);
-    
-    return {pageData};
+
+    return { pageData };
 };
 
 export default useCurrentPage;

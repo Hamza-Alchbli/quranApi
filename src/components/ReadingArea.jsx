@@ -1,9 +1,11 @@
 import useCurrentPage from "./hooks/useCurrentPage";
 import Loader from "./Loader";
+import { useEffect, useState } from "react";
 // import LanguageIdentifiers from "./LanguageIdentifiers";
 
 const ReadingArea = () => {
     const { pageData } = useCurrentPage();
+
     return (
         <div className="page-container">
             <div className="page-header">
@@ -13,42 +15,26 @@ const ReadingArea = () => {
                 <div className="page">
                     {Object.keys(pageData).length > 0 ? (
                         <>
-                            {pageData.map((aya) => {
-                                let phrase = [];
-                                let currentSpan = null;
-                                aya.words.forEach((word) => {
-                                    if (/\(\d+\)/.test(word.translation.text)) {
-                                        if (currentSpan) {
-                                            phrase.push(" ");
-                                            phrase.push(currentSpan);
-                                            currentSpan = null;
-                                        }
-                                        const number =
-                                            word.translation.text.replace(
-                                                /[()]/g,
-                                                ""
-                                            );
-                                        currentSpan = (
-                                            <span key={word.id}>
-                                                ({number})
-                                            </span>
-                                        );
-                                    } else {
-                                        const text = word.translation.text;
-                                        const span = currentSpan ? (
-                                            <span key={word.id}>{text}</span>
-                                        ) : (
-                                            text
-                                        );
-                                        phrase.push(span);
+                            {pageData
+                                .reduce((groups, word) => {
+                                    if (!groups[word.line_number]) {
+                                        groups[word.line_number] = [];
                                     }
-                                });
-                                if (currentSpan) {
-                                    phrase.push(" ");
-                                    phrase.push(currentSpan);
-                                }
-                                return <p key={aya.verse_key}>{phrase} </p>;
-                            })}
+                                    groups[word.line_number].push(word);
+                                    return groups;
+                                }, [])
+                                .map((group, index) => (
+                                    <div
+                                        key={index}
+                                        className={`line-${group[0].line_number}`}
+                                    >
+                                        {group.map((word) => (
+                                            <span key={word.id}>
+                                                {word.translation.text + " "}
+                                            </span>
+                                        ))}
+                                    </div>
+                                ))}
                         </>
                     ) : (
                         <Loader />
@@ -57,23 +43,26 @@ const ReadingArea = () => {
                 <div className="page arabic">
                     {Object.keys(pageData).length > 0 ? (
                         <>
-                            {pageData.map((aya) => {
-                                // {
-                                //     console.log(aya);
-                                // }
-                                return (
-                                    <p key={aya.id}>
-                                        {aya.words.map((word) => (
-                                            <span
-                                                key={`${aya.verse_key}-${word.id}`}
-                                            >
-                                                {`${word.text} `} 
+                            {pageData
+                                .reduce((groups, word) => {
+                                    if (!groups[word.line_number]) {
+                                        groups[word.line_number] = [];
+                                    }
+                                    groups[word.line_number].push(word);
+                                    return groups;
+                                }, [])
+                                .map((group, index) => (
+                                    <div
+                                        key={index}
+                                        className={`line-${group[0].line_number}`}
+                                    >
+                                        {group.map((word) => (
+                                            <span key={word.id}>
+                                                {word.text}
                                             </span>
                                         ))}
-                                        <br></br>
-                                    </p>
-                                );
-                            })}
+                                    </div>
+                                ))}
                         </>
                     ) : (
                         <Loader />

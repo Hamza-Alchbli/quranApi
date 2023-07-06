@@ -31,14 +31,14 @@
         font-size: 1.2rem;
         display: inline;
     }
-    &:nth-child(2) {
-        p {
-            text-align: center;
-            -webkit-background-clip: text;
-            background-clip: text;
-            direction: rtl;
+    &:nth-child(2).arabic {
+        div[class^="line"] {
             font-family: "QCF_P001", serif;
-            font-size: 30px;
+            text-align: center;
+            p,span {
+                direction: rtl;
+                font-size: 30px;
+            }
         }
     }
 }
@@ -46,6 +46,4 @@
     .page:first-of-type {
         display: none;
     }
-
-   
 }
