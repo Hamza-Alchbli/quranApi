@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import useLoadingStatus from "./useLoadingStatus";
 
-export const useSurahs = ({ reciter, currentIndex }) => {
+export const useSurahs = ({ reciter = "mishari_al_afasy", currentIndex = 1  }) => {
     const [surahs, setSurahs] = useState([]);
     const [currentSurah, setCurrentSurah] = useState();
     const [currentSurahAudio, setCurrentSurahAudio] = useState(1);
@@ -49,3 +49,8 @@ export const useSurahs = ({ reciter, currentIndex }) => {
         setLang,
     };
 };
+useSurahs.defaultProps = {
+    reciter: "mishari_al_afasy",
+    currentIndex: 1,
+};
+

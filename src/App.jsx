@@ -12,6 +12,8 @@ import Loader from "./components/Loader";
 function App() {
     const { error, loading } = useLoadingStatus();
     const [libraryStatus, setLibraryStatus] = useState(false);
+    const [reciter, setReciter] = useState("mishari_al_afasy");
+    const [currentIndex, setCurrentIndex] = useState(1);
     const location = useLocation();
 
     return (
@@ -38,6 +40,10 @@ function App() {
                                                 {...{
                                                     libraryStatus,
                                                     setLibraryStatus,
+                                                    reciter,
+                                                    setReciter,
+                                                    currentIndex,
+                                                    setCurrentIndex,
                                                 }}
                                             />
                                         </AnimatedPage>
@@ -52,6 +58,10 @@ function App() {
                                                 {...{
                                                     libraryStatus,
                                                     setLibraryStatus,
+                                                    reciter,
+                                                    setReciter,
+                                                    currentIndex,
+                                                    setCurrentIndex,
                                                 }}
                                             />
                                         </AnimatedPage>

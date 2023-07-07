@@ -4,11 +4,16 @@ import { useState } from "react";
 import { useSurahs } from "../components/hooks/useSurahs";
 import ReadingSurah from "./ReadingSurah";
 import LibOptions from "./LibOptions";
-const ReadingLibrary = ({ libraryStatus, setLibraryStatus }) => {
-    const [reciter, setReciter] = useState("mishari_al_afasy");
-    const [currentIndex, setCurrentIndex] = useState(1);
+const ReadingLibrary = ({
+    libraryStatus,
+    setLibraryStatus,
+    reciter,
+    setReciter,
+    currentIndex,
+    setCurrentIndex,
+}) => {
 
-    const { surahs, currentSurah, setLang,lang } = useSurahs({
+    const { surahs, currentSurah, setLang, lang } = useSurahs({
         reciter,
         currentIndex,
     });
@@ -24,7 +29,6 @@ const ReadingLibrary = ({ libraryStatus, setLibraryStatus }) => {
         setSearchTerm(removeDiacritics(event.target.value));
     };
 
-
     return (
         <div className={`library ${libraryStatus ? "active-library" : ""}`}>
             <h2>Quran Library</h2>
@@ -35,9 +39,7 @@ const ReadingLibrary = ({ libraryStatus, setLibraryStatus }) => {
                 value={searchTerm}
                 onChange={handleSearch}
             />
-            <LibOptions
-                {...{setReciter,setLang,currentSurah}}
-            />
+            <LibOptions {...{ setReciter, setLang, currentSurah }} />
             {/* {console.log(currentSurah)} */}
             {surahs.map((surah, index) => {
                 const searchTermLower = searchTerm.toLowerCase();
@@ -76,6 +78,10 @@ const ReadingLibrary = ({ libraryStatus, setLibraryStatus }) => {
 ReadingLibrary.propTypes = {
     libraryStatus: PropTypes.bool.isRequired,
     setLibraryStatus: PropTypes.func.isRequired,
-}
+    reciter: PropTypes.string.isRequired,
+    setReciter: PropTypes.func.isRequired,
+    currentIndex: PropTypes.number.isRequired,
+    setCurrentIndex: PropTypes.func.isRequired,
+};
 
 export default ReadingLibrary;

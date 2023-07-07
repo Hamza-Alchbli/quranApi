@@ -10,10 +10,15 @@ import Loader from "../components/Loader.jsx";
 import useLoadingStatus from "../components/hooks/useLoadingStatus.jsx";
 import { useSurahs } from "../components/hooks/useSurahs.jsx";
 
-function AudioPlayer({ setLibraryStatus, libraryStatus }) {
+function AudioPlayer({
+    setLibraryStatus,
+    libraryStatus,
+    reciter,
+    setReciter,
+    currentIndex,
+    setCurrentIndex,
+}) {
     const { error, loading, setLoading, setError } = useLoadingStatus();
-    const [reciter, setReciter] = useState("mishari_al_afasy");
-    const [currentIndex, setCurrentIndex] = useState(1);
 
     const {
         surahs,
@@ -114,9 +119,7 @@ function AudioPlayer({ setLibraryStatus, libraryStatus }) {
                 <p>{error}</p>
             ) : (
                 <>
-                    {currentSurah && (
-                        <Surah {...{ currentSurah, reciter }} />
-                    )}
+                    {currentSurah && <Surah {...{ currentSurah, reciter }} />}
                     <PLayer
                         {...{
                             isPlaying,
@@ -164,5 +167,9 @@ function AudioPlayer({ setLibraryStatus, libraryStatus }) {
 AudioPlayer.propTypes = {
     libraryStatus: PropTypes.bool.isRequired,
     setLibraryStatus: PropTypes.func.isRequired,
+    reciter: PropTypes.string.isRequired,
+    setReciter: PropTypes.func.isRequired,
+    currentIndex: PropTypes.number.isRequired,
+    setCurrentIndex: PropTypes.func.isRequired
 };
 export default AudioPlayer;
