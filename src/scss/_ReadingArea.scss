@@ -1,7 +1,18 @@
-@font-face {
-    font-family: "QCF_P001";
-    src: url("/public/fonts/QCF_P001.TTF") format("truetype");
-}
+@function zero-padding($number, $width) {
+    $number-string: $number + '';
+    $padding: $width - str-length($number-string);
+    @return if($padding > 0, str-repeat('0', $padding) + $number-string, $number-string);
+  }
+  
+  @for $i from 1 through 604 {
+    $font-number: zero-padding($i, 3);
+  
+    @font-face {
+      font-family: "QCF_P#{$font-number}";
+      src: url("/public/fonts/QCF_P#{$font-number}.TTF") format("truetype");
+    }
+  }
+  
 
 .page-container {
     min-height: 80vh;
