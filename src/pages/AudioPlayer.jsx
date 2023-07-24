@@ -32,6 +32,8 @@ function AudioPlayer({
     // console.log(currentIndex);
 
     const [isPlaying, setIsPlaying] = useState(false);
+    const [shuffle, setShuffle] = useState(false);
+    const [randomSurah, setRandomSurah] = useState(null);
 
     const audio = useRef(null);
 
@@ -58,6 +60,10 @@ function AudioPlayer({
         }
     }, [currentSurahAudio, audio, isPlaying]);
 
+    const generateRandomIndex = () => {
+        const newSurah = Math.floor(Math.random() * 114);
+        setRandomSurah(newSurah);
+    };
     const generateSurahAudioURL = async (
         index,
         reciter = "mishari_al_afasy"
@@ -93,13 +99,23 @@ function AudioPlayer({
     };
 
     const surahEndHandler = () => {
-        let currentIndex = currentSurah.id - 1;
+        if (shuffle) {
+            if (currentSurah.id === 114) {
+                currentIndex = -1;
+            }
+            generateRandomIndex();
+            if (randomSurah) {
+                generateSurahAudioURL(randomSurah, reciter);
+            }
+        } else {
+            let currentIndex = currentSurah.id - 1;
 
-        if (currentSurah.id === 114) {
-            currentIndex = -1;
+            if (currentSurah.id === 114) {
+                currentIndex = -1;
+            }
+
+            generateSurahAudioURL(currentIndex + 1, reciter);
         }
-
-        generateSurahAudioURL(currentIndex + 1, reciter);
     };
     const playSongHandler = () => {
         if (isPlaying) {
@@ -132,6 +148,10 @@ function AudioPlayer({
                             playSongHandler,
                             reciter,
                             setCurrentIndex,
+                            shuffle,
+                            setShuffle,
+                            randomSurah,
+                            generateRandomIndex,
                         }}
                     />
                     <AudioLibrary
@@ -170,6 +190,6 @@ AudioPlayer.propTypes = {
     reciter: PropTypes.string.isRequired,
     setReciter: PropTypes.func.isRequired,
     currentIndex: PropTypes.number.isRequired,
-    setCurrentIndex: PropTypes.func.isRequired
+    setCurrentIndex: PropTypes.func.isRequired,
 };
 export default AudioPlayer;

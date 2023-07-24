@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 import Loader from "../components/Loader.jsx";
-
+import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faAngleLeft,
     faAngleRight,
     faPause,
     faPlay,
+    faShuffle,
 } from "@fortawesome/free-solid-svg-icons";
 
 function PLayer({
@@ -19,7 +20,16 @@ function PLayer({
     playSongHandler,
     reciter,
     setCurrentIndex,
+    shuffle,
+    setShuffle,
+    generateRandomIndex,
+    randomSurah,
 }) {
+    useEffect(() => {
+        if (shuffle && randomSurah !== null) {
+            // console.log(randomSurah);
+        }
+    }, [shuffle, randomSurah]);
     const skipHandler = async (dir) => {
         let currentIndex = currentSurah.id - 1;
 
@@ -27,14 +37,23 @@ function PLayer({
             if (currentSurah.id == 114) {
                 currentIndex = -1;
             }
-            await generateSurahAudioURL(currentIndex + 1, reciter);
-            // console.log(currentSurah);
-            setCurrentIndex(currentSurah.id + 1 );
+
+            if (shuffle) {
+                generateRandomIndex();
+                console.log(randomSurah);
+                if (randomSurah) {
+                    await generateSurahAudioURL(randomSurah, reciter);
+                }
+                setCurrentIndex(randomSurah + 1);
+            } else {
+                await generateSurahAudioURL(currentIndex + 1, reciter);
+                setCurrentIndex(currentSurah.id + 1);
+            }
         }
+
         if (dir === "skip-back") {
             if (currentIndex == 0) {
                 currentIndex = 114;
-               
             }
             await generateSurahAudioURL(currentIndex - 1, reciter);
             setCurrentIndex(currentIndex);
@@ -57,6 +76,7 @@ function PLayer({
     const trackAnim = {
         transform: `translateX(${surahInfo.animationPercentage}%)`,
     };
+
     return (
         <div className="player">
             {audio.current ? (
@@ -106,6 +126,12 @@ function PLayer({
                             size="2x"
                             icon={faAngleRight}
                         />
+                        <FontAwesomeIcon
+                            onClick={() => setShuffle(!shuffle)}
+                            className={`shuffle ${!shuffle ? "off" : ""}`}
+                            size="2x"
+                            icon={faShuffle}
+                        />
                     </div>
                 </>
             ) : (
@@ -134,6 +160,11 @@ PLayer.propTypes = {
     setSurahInfo: PropTypes.func.isRequired,
     reciter: PropTypes.string.isRequired,
     setCurrentIndex: PropTypes.func,
+    shuffle: PropTypes.bool.isRequired,
+    setShuffle: PropTypes.func,
+    generateRandomIndex: PropTypes.func,
+    randomSurah:PropTypes.number
+
 };
 
 export default PLayer;
