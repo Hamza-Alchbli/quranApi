@@ -11,8 +11,9 @@ const ReadingLibrary = ({
     setReciter,
     currentIndex,
     setCurrentIndex,
+    setCurrentPage,
+    currentPage,
 }) => {
-
     const { surahs, currentSurah, setLang, lang } = useSurahs({
         reciter,
         currentIndex,
@@ -65,6 +66,8 @@ const ReadingLibrary = ({
                                 setLibraryStatus,
                                 setCurrentIndex,
                                 lang,
+                                setCurrentPage,
+                                currentPage,
                             }}
                         />
                     );

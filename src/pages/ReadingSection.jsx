@@ -3,6 +3,7 @@ import Loader from "../components/Loader";
 import useLoadingStatus from "../components/hooks/useLoadingStatus";
 import ReadingLibrary from "../components/ReadingLibrary";
 import ReadingArea from "../components/ReadingArea";
+import useCurrentPage from "../components/hooks/useCurrentPage";
 import PropTypes from "prop-types";
 
 const ReadingSection = ({
@@ -14,6 +15,8 @@ const ReadingSection = ({
     setCurrentIndex,
 }) => {
     const { error, loading } = useLoadingStatus();
+    const { pageData, currentPage, setCurrentPage } = useCurrentPage();
+
     return (
         <AnimatedPage>
             {loading ? (
@@ -30,6 +33,9 @@ const ReadingSection = ({
                             setReciter,
                             currentIndex,
                             setCurrentIndex,
+                            pageData,
+                            currentPage,
+                            setCurrentPage,
                         }}
                     />
                     <ReadingArea
@@ -38,6 +44,9 @@ const ReadingSection = ({
                             setReciter,
                             currentIndex,
                             setCurrentIndex,
+                            pageData,
+                            currentPage,
+                            setCurrentPage,
                         }}
                     />
                 </>

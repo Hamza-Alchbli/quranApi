@@ -22,13 +22,15 @@
     src: url('/fonts/sura_names.woff2') format('woff2');
   }
   
-  .test {
+
+
+.surah-name {
     font-family: 'surahnames', sans-serif;
-  }
-  
+    display: flex;
+    font-size: 1.5rem;
+    font-weight: lighter;
 
-//   @import url();
-
+}
 .page-container {
     min-height: 80vh;
     display: flex;
@@ -38,6 +40,11 @@
     gap: 1rem;
     width: 100%;
     padding: 2rem;
+    .page-header {
+        h1 {
+            text-align: center;
+        }
+    }
 }
 .pages {
     display: flex;
@@ -50,7 +57,7 @@
 .page {
     width: 50%;
     // min-height: 100%;
-    background-color: #1f2125;
+    background-color: #1F2125;
     padding: .5rem;
     border-radius: 5px;
     p,span {
@@ -58,7 +65,7 @@
         display: inline;
         font-size: 1.5rem;
     }
-    &:nth-child(2).arabic {
+    &.arabic {
         flex: unset;
         // flex: 3;
         width: fit-content;
@@ -70,14 +77,34 @@
             p,span {
                 text-align: center;
                 direction: rtl;
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
         }
 
     }
 }
-@media screen and (max-width: 768px) {
-    .page:first-of-type {
-        display: none;
+.page-footer {
+    border-top: 2px solid white;
+    padding: .5rem;
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: fit-content;
+    gap: 10rem;
+    button {
+        border: none;
+        background-color: transparent;
+        color: #c7c7c7;
+        border: 1px solid #c7c7c7;
+        border-radius: 5px;
+        padding: .75rem;
+        cursor: pointer;
     }
 }
+// @media screen and (max-width: 768px) {
+//     .page:first-of-type {
+//         display: none;
+//     }
+// }
