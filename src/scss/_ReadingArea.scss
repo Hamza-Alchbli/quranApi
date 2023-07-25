@@ -9,10 +9,25 @@
   
     @font-face {
       font-family: "QCF_P#{$font-number}";
-      src: url("/public/fonts/QCF_P#{$font-number}.TTF") format("truetype");
+      src: url("/fonts/QCF_P#{$font-number}.TTF") format("truetype");
     }
+}
+@font-face {
+    font-family: surahnames;
+    src: url('/public//fonts/sura_names.woff2');
+}
+
+@font-face {
+    font-family: 'surahnames';
+    src: url('/fonts/sura_names.woff2') format('woff2');
   }
   
+  .test {
+    font-family: 'surahnames', sans-serif;
+  }
+  
+
+//   @import url();
 
 .page-container {
     min-height: 80vh;
@@ -33,10 +48,10 @@
     height: 100%;
 }
 .page {
-    width: 20rem;
-    min-height: 20rem;
+    width: 50%;
+    // min-height: 100%;
     background-color: #1f2125;
-    padding: 1rem;
+    padding: .5rem;
     border-radius: 5px;
     p,span {
         font-size: 1.2rem;
@@ -44,14 +59,21 @@
         font-size: 1.5rem;
     }
     &:nth-child(2).arabic {
+        flex: unset;
+        // flex: 3;
+        width: fit-content;
+        height: 100%;
         div[class^="line"] {
-            font-family: "QCF_P001", serif;
+            width: 100%;
+            // font-family: "QCF_P001", serif;
             text-align: center;
             p,span {
+                text-align: center;
                 direction: rtl;
                 font-size: 2rem;
             }
         }
+
     }
 }
 @media screen and (max-width: 768px) {

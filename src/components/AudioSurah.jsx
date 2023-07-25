@@ -32,11 +32,13 @@ function AudioSurah({
             }
             onClick={selectSurah}
         >
-            <img src="/quran-ar.webp" alt="quran" />
             <div className="surah-info">
                 <h3>{surah.name_arabic}</h3>
                 <p>
                     {surah.name_simple} || {surah.translated_name.name}
+                </p>
+                <p>
+                    Page: {surah.pages[0]} || Verses: {surah.verses_count}
                 </p>
             </div>
         </div>
@@ -50,6 +52,8 @@ AudioSurah.propTypes = {
         name_arabic: PropTypes.string.isRequired,
         name_simple: PropTypes.string.isRequired,
         translated_name: PropTypes.object.isRequired,
+        pages: PropTypes.array.isRequired,
+        verses_count: PropTypes.number.isRequired
     }),
     playSongHandler: PropTypes.func.isRequired,
     isPlaying: PropTypes.bool.isRequired,

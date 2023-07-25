@@ -28,8 +28,12 @@ function PLayer({
     useEffect(() => {
         if (shuffle && randomSurah !== null) {
             // console.log(randomSurah);
+            if (randomSurah) {
+                generateSurahAudioURL(randomSurah, reciter);
+            }
+            setCurrentIndex(randomSurah + 1);
         }
-    }, [shuffle, randomSurah]);
+    }, [randomSurah]);
     const skipHandler = async (dir) => {
         let currentIndex = currentSurah.id - 1;
 
@@ -40,7 +44,7 @@ function PLayer({
 
             if (shuffle) {
                 generateRandomIndex();
-                console.log(randomSurah);
+                // console.log(randomSurah);
                 if (randomSurah) {
                     await generateSurahAudioURL(randomSurah, reciter);
                 }
