@@ -5,7 +5,6 @@ import { AnimatePresence } from "framer-motion";
 import AnimatedPage from "./components/AnimatedPage";
 import Nav from "./components/Nav";
 import AudioPlayer from "./pages/AudioPlayer";
-import ReadingSection from "./pages/ReadingSection";
 import useLoadingStatus from "./components/hooks/useLoadingStatus.jsx";
 import Loader from "./components/Loader";
 
@@ -37,24 +36,6 @@ function App() {
                                     element={
                                         <AnimatedPage>
                                             <AudioPlayer
-                                                {...{
-                                                    libraryStatus,
-                                                    setLibraryStatus,
-                                                    reciter,
-                                                    setReciter,
-                                                    currentIndex,
-                                                    setCurrentIndex,
-                                                }}
-                                            />
-                                        </AnimatedPage>
-                                    }
-                                />
-
-                                <Route
-                                    path="/read"
-                                    element={
-                                        <AnimatedPage>
-                                            <ReadingSection
                                                 {...{
                                                     libraryStatus,
                                                     setLibraryStatus,
