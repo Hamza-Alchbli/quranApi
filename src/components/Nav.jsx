@@ -13,6 +13,7 @@ function Nav({ libraryStatus, setLibraryStatus }) {
             <div className="nav-links">
                 <button onClick={() => setLibraryStatus(!libraryStatus)}>
                     <FontAwesomeIcon icon={faQuran} size="lg" />
+                    Library
                 </button>
  
             </div>
