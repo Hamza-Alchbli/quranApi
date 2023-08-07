@@ -15,7 +15,6 @@ function Nav({ libraryStatus, setLibraryStatus }) {
                     <FontAwesomeIcon icon={faQuran} size="lg" />
                     Library
                 </button>
- 
             </div>
         </nav>
     );

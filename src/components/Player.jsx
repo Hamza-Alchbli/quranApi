@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import Loader from "../components/Loader.jsx";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faAngleLeft,
@@ -9,9 +9,11 @@ import {
     faPlay,
     faShuffle,
 } from "@fortawesome/free-solid-svg-icons";
+import { Timer } from "lucide-react";
 
 function PLayer({
     isPlaying,
+    setIsPlaying,
     generateSurahAudioURL,
     currentSurah,
     audio,
@@ -25,15 +27,33 @@ function PLayer({
     generateRandomIndex,
     randomSurah,
 }) {
+    const [timer, setTimer] = useState(false);
+    const timerEl = useRef(null);
+    const [timerValue, setTimerValue] = useState(0);
+
     useEffect(() => {
         if (shuffle && randomSurah !== null) {
-            // console.log(randomSurah);
             if (randomSurah) {
                 generateSurahAudioURL(randomSurah, reciter);
             }
             setCurrentIndex(randomSurah + 1);
         }
     }, [randomSurah]);
+
+    useEffect(() => {
+        if (timerValue > 0 && timer) {
+            const timerInterval = setInterval(() => {
+                if (!timer) return;
+                audio.current.pause();
+                setIsPlaying(false);
+            }, timerValue * 60000);
+            return () => clearInterval(timerInterval);
+        }
+    }, [timerValue, timer]);
+
+    const updateTimerHandler = () => {
+        setTimerValue(timerEl.current.value);
+    };
     const skipHandler = async (dir) => {
         let currentIndex = currentSurah.id - 1;
 
@@ -73,10 +93,12 @@ function PLayer({
             ("0" + Math.floor(time % 60)).slice(-2)
         );
     };
+
     const dragHandler = (e) => {
         audio.current.currentTime = e.target.value;
         setSurahInfo({ ...surahInfo, currentTime: parseInt(e.target.value) });
     };
+
     const trackAnim = {
         transform: `translateX(${surahInfo.animationPercentage}%)`,
     };
@@ -130,12 +152,45 @@ function PLayer({
                             size="2x"
                             icon={faAngleRight}
                         />
-                        <FontAwesomeIcon
-                            onClick={() => setShuffle(!shuffle)}
-                            className={`shuffle ${!shuffle ? "off" : ""}`}
-                            size="2x"
-                            icon={faShuffle}
-                        />
+                    </div>
+                    <div className="options-control">
+                        <div className="icons">
+                            <FontAwesomeIcon
+                                onClick={() => setShuffle(!shuffle)}
+                                className={`shuffle ${!shuffle ? "off" : ""}`}
+                                size="2x"
+                                icon={faShuffle}
+                            />
+                            <Timer
+                                size={32}
+                                onClick={() => {
+                                    setTimer(!timer);
+                                    setTimerValue(0);
+                                }}
+                                className={`timer-icon ${!timer ? "off" : ""}`}
+                            />
+                        </div>
+                        <div className={`active-timer ${!timer ? "off" : ""}`}>
+                            <p>Sleep timer:</p>
+                            <select
+                                name="timer"
+                                id="timer"
+                                ref={timerEl}
+                                onChange={(e) => updateTimerHandler(e)}
+                            >
+                                <option value="0">Off</option>
+                                <option value="1">1 min</option>
+                                <option value="3">3 min</option>
+                                <option value="5">5 min</option>
+                                <option value="10">10 min</option>
+                                <option value="15">15 min</option>
+                                <option value="30">30 min</option>
+                                <option value="45">45 min</option>
+                                <option value="60">1 hour</option>
+                                <option value="90">1.5 hour</option>
+                                <option value="120">2 hours</option>
+                            </select>
+                        </div>
                     </div>
                 </>
             ) : (
@@ -166,9 +221,9 @@ PLayer.propTypes = {
     setCurrentIndex: PropTypes.func,
     shuffle: PropTypes.bool.isRequired,
     setShuffle: PropTypes.func,
+    setIsPlaying: PropTypes.func,
     generateRandomIndex: PropTypes.func,
-    randomSurah:PropTypes.number
-
+    randomSurah: PropTypes.number,
 };
 
 export default PLayer;
