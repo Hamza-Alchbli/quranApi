@@ -26,9 +26,19 @@ export const useSurahs = ({ reciter = "mishari_al_afasy", currentIndex = 1  }) =
                         ? surahData[0]
                         : surahData[currentIndex - 1]
                 );
-                setCurrentSurahAudio(
-                    `https://download.quranicaudio.com/qdc/${reciter}/murattal/${currentIndex}.mp3`
-                );
+                // make current index start from 001 isntead not 1  for number 1 if the reciter is mishari_al_afasy
+                if(reciter === "abdulbaset_warsh" || reciter === "abdurrashid_sufi_soosi_rec" || reciter === "noreen_siddiq"){ 
+                    // make current index start from padStart 3 digit
+                    setCurrentSurahAudio(
+                        // `https://download.quranicaudio.com/quran/${reciter}/murattal/${currentIndex.toString().padStart(3, "0")}.mp3`
+                        `https://download.quranicaudio.com/quran/${reciter}//${currentIndex.toString().padStart(3, "0")}.mp3`
+                    );
+                } else {
+                    setCurrentSurahAudio(
+                        `https://download.quranicaudio.com/qdc/${reciter}/murattal/${currentIndex}.mp3`
+                    );
+                }
+               
                 setLoading(false);
             } catch (error) {
                 console.log(error);

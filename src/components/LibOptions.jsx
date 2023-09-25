@@ -9,17 +9,17 @@ const LibOptions = ({
 }) => {
     const allLang = useAllLang();
 
-
     const handleReciterChange = (event) => {
         setReciter(event.target.value);
-        generateSurahAudioURL ?  generateSurahAudioURL(currentSurah.id - 1, event.target.value) : "";
-       
+        generateSurahAudioURL
+            ? generateSurahAudioURL(currentSurah.id - 1, event.target.value)
+            : "";
     };
 
     const handleLangChange = (event) => {
         setLang(event.target.value);
     };
-    
+
     return (
         <>
             <select onChange={handleReciterChange} id="reciter">
@@ -37,6 +37,16 @@ const LibOptions = ({
                 </option>
                 <option value="khalil_al_husary">
                     Mahmoud Khalil Al-Hussary || محمود خليل الحصري
+                </option>
+                {/* devider for other type of reciters*/}
+                <option value="abdulbaset_warsh">
+                    Abdul Basit Abdul Samad warsh || عبد الباسط عبد الصمد (ورش)
+                </option>
+                <option value="abdurrashid_sufi_soosi_rec">
+                    abdurrashid sufi soosi || عبد الرشيد صوفي
+                </option>
+                <option value="noreen_siddiq">
+                    noreen siddiq || نورين صديق
                 </option>
             </select>
             {allLang ? (
@@ -70,5 +80,5 @@ LibOptions.propTypes = {
     setLang: PropTypes.func.isRequired,
     generateSurahAudioURL: PropTypes.func,
     currentSurah: PropTypes.object.isRequired,
-}
+};
 export default LibOptions;
